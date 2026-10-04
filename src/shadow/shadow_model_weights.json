@@ -1,0 +1,54 @@
+{
+  "version": "2.0_pixel_diff",
+  "n_training_samples": 5837,
+  "n_training_videos": 38,
+  "aspect_ratio_mean": 0.42,
+  "base_width_scale": 1.85,
+  "width_height_ratio": 0.42,
+  "base_opacity": 0.45,
+  "base_blur": 27,
+  "ground_contact_percentile": 90.0,
+  "action_profiles": {
+    "LANCIO_PARABOLICO": {
+      "aspect_ratio": 0.42,
+      "rx_scale": 1.3,
+      "opacity_factor": 0.85,
+      "blur_offset": 6
+    },
+    "TIRO_TESO": {
+      "aspect_ratio": 0.295,
+      "rx_scale": 1.85,
+      "opacity_factor": 1.0,
+      "blur_offset": 0
+    },
+    "RASOTERRA": {
+      "aspect_ratio": 0.35,
+      "rx_scale": 1.5,
+      "opacity_factor": 1.05,
+      "blur_offset": -6
+    },
+    "RIMBALZO": {
+      "aspect_ratio": 0.32,
+      "rx_scale": 1.9,
+      "opacity_factor": 0.95,
+      "blur_offset": 2
+    }
+  },
+  "base_width_offset": 9.559896304818004,
+  "opacity_decay_rate": 1.75,
+  "min_opacity": 0.2,
+  "blur_expansion_rate": 0.85,
+  "flight_height_threshold": 6.0,
+  "w_reg_x": [
+    1.0,
+    0.0
+  ],
+  "w_reg_y": [
+    1.0,
+    0.0
+  ],
+  "w_reg_size": [
+    -0.0014140106632738788,
+    9.896386872734924
+  ]
+}

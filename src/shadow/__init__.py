@@ -1,0 +1,3 @@
+"""
+Shadow Processing Algorithms Package
+"""

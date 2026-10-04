@@ -1,0 +1,942 @@
+{
+  "WorldCup00158208.mp4": {
+    "question": "Il pallone supera la linea bianca ed esce dal campo?",
+    "target_frame": 61,
+    "target_ms": 2541,
+    "fps": 24.0,
+    "n_frames": 139,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00158208.mp4": {
+    "question": "Il pallone supera la linea bianca ed esce dal campo?",
+    "target_frame": 61,
+    "target_ms": 2541,
+    "fps": 24.0,
+    "n_frames": 139,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00158712.mp4": {
+    "question": "Il giocatore colpisce il pallone di testa?",
+    "target_frame": 82,
+    "target_ms": 3416,
+    "fps": 24.0,
+    "n_frames": 147,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00158712.mp4": {
+    "question": "Il giocatore colpisce il pallone di testa?",
+    "target_frame": 82,
+    "target_ms": 3416,
+    "fps": 24.0,
+    "n_frames": 147,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00159000.mp4": {
+    "question": "A quale squadra arriva il passaggio?",
+    "target_frame": 73,
+    "target_ms": 3041,
+    "fps": 24.0,
+    "n_frames": 122,
+    "correct_answer": "yes",
+    "label_yes": "Propria",
+    "label_no": "Avversaria"
+  },
+  "_WorldCup00159000.mp4": {
+    "question": "A quale squadra arriva il passaggio?",
+    "target_frame": 73,
+    "target_ms": 3041,
+    "fps": 24.0,
+    "n_frames": 122,
+    "correct_answer": "yes",
+    "label_yes": "Propria",
+    "label_no": "Avversaria"
+  },
+  "WorldCup00159456.mp4": {
+    "question": "Il pallone entra in rete?",
+    "target_frame": 112,
+    "target_ms": 4666,
+    "fps": 24.0,
+    "n_frames": 219,
+    "correct_answer": "no",
+    "label_yes": "Sì",
+    "label_no": "No"
+  },
+  "_WorldCup00159456.mp4": {
+    "question": "Il pallone entra in rete?",
+    "target_frame": 112,
+    "target_ms": 4666,
+    "fps": 24.0,
+    "n_frames": 219,
+    "correct_answer": "no",
+    "label_yes": "Sì",
+    "label_no": "No"
+  },
+  "WorldCup00160488.mp4": {
+    "question": "A quale squadra arriva il passaggio?",
+    "target_frame": 65,
+    "target_ms": 2708,
+    "fps": 24.0,
+    "n_frames": 122,
+    "correct_answer": "yes",
+    "label_yes": "Propria",
+    "label_no": "Avversaria"
+  },
+  "_WorldCup00160488.mp4": {
+    "question": "A quale squadra arriva il passaggio?",
+    "target_frame": 65,
+    "target_ms": 2708,
+    "fps": 24.0,
+    "n_frames": 122,
+    "correct_answer": "yes",
+    "label_yes": "Propria",
+    "label_no": "Avversaria"
+  },
+  "_3.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 36,
+    "target_ms": 1440,
+    "fps": 25.0,
+    "n_frames": 71,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000114.mp4": {
+    "question": "Il pallone passa sopra la traversa?",
+    "target_frame": 35,
+    "target_ms": 1167,
+    "fps": 29.97002997002997,
+    "n_frames": 62,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000114.mp4": {
+    "question": "Il pallone passa sopra la traversa?",
+    "target_frame": 35,
+    "target_ms": 1167,
+    "fps": 29.97002997002997,
+    "n_frames": 62,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000180.mp4": {
+    "question": "Il portiere riesce a parare o bloccare il pallone?",
+    "target_frame": 41,
+    "target_ms": 1438,
+    "fps": 28.50871322643681,
+    "n_frames": 70,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000180.mp4": {
+    "question": "Il portiere riesce a parare o bloccare il pallone?",
+    "target_frame": 41,
+    "target_ms": 1438,
+    "fps": 28.50871322643681,
+    "n_frames": 70,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000204.mp4": {
+    "question": "Il portiere riesce a parare o bloccare il pallone?",
+    "target_frame": 142,
+    "target_ms": 4738,
+    "fps": 29.97002997002997,
+    "n_frames": 157,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000204.mp4": {
+    "question": "Il portiere riesce a parare o bloccare il pallone?",
+    "target_frame": 142,
+    "target_ms": 4738,
+    "fps": 29.97002997002997,
+    "n_frames": 157,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000216.mp4": {
+    "question": "Il pallone passa sopra la traversa?",
+    "target_frame": 52,
+    "target_ms": 1735,
+    "fps": 29.97002997002997,
+    "n_frames": 87,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000216.mp4": {
+    "question": "Il pallone passa sopra la traversa?",
+    "target_frame": 52,
+    "target_ms": 1735,
+    "fps": 29.97002997002997,
+    "n_frames": 87,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000264.mp4": {
+    "question": "Il pallone entra in rete?",
+    "target_frame": 26,
+    "target_ms": 867,
+    "fps": 29.97002997002997,
+    "n_frames": 45,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000264.mp4": {
+    "question": "Il pallone entra in rete?",
+    "target_frame": 26,
+    "target_ms": 867,
+    "fps": 29.97002997002997,
+    "n_frames": 45,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000294.mp4": {
+    "question": "Quale squadra tocca per ultima il pallone?",
+    "target_frame": 102,
+    "target_ms": 3524,
+    "fps": 28.93658066071859,
+    "n_frames": 137,
+    "correct_answer": "no",
+    "label_yes": "BLU",
+    "label_no": "AZZURRA"
+  },
+  "_WorldCup00000294.mp4": {
+    "question": "Quale squadra tocca per ultima il pallone?",
+    "target_frame": 102,
+    "target_ms": 3524,
+    "fps": 28.93658066071859,
+    "n_frames": 137,
+    "correct_answer": "no",
+    "label_yes": "BLU",
+    "label_no": "AZZURRA"
+  },
+  "WorldCup00000318.mp4": {
+    "question": "Quale squadra prende il pallone?",
+    "target_frame": 53,
+    "target_ms": 1768,
+    "fps": 29.97002997002997,
+    "n_frames": 93,
+    "correct_answer": "no",
+    "label_yes": "GIALLA",
+    "label_no": "ROSSA"
+  },
+  "_WorldCup00000318.mp4": {
+    "question": "Quale squadra prende il pallone?",
+    "target_frame": 53,
+    "target_ms": 1768,
+    "fps": 29.97002997002997,
+    "n_frames": 93,
+    "correct_answer": "no",
+    "label_yes": "GIALLA",
+    "label_no": "ROSSA"
+  },
+  "WorldCup00000414.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 48,
+    "target_ms": 1668,
+    "fps": 28.760861009354848,
+    "n_frames": 94,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000414.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 48,
+    "target_ms": 1668,
+    "fps": 28.760861009354848,
+    "n_frames": 94,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000420.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 50,
+    "target_ms": 1668,
+    "fps": 29.97002997002997,
+    "n_frames": 80,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000420.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 50,
+    "target_ms": 1668,
+    "fps": 29.97002997002997,
+    "n_frames": 80,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000582.mp4": {
+    "question": "Il pallone entra in rete?",
+    "target_frame": 59,
+    "target_ms": 1968,
+    "fps": 29.97002997002997,
+    "n_frames": 80,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000582.mp4": {
+    "question": "Il pallone entra in rete?",
+    "target_frame": 59,
+    "target_ms": 1968,
+    "fps": 29.97002997002997,
+    "n_frames": 80,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000954.mp4": {
+    "question": "Il pallone tocca terra prima di entrare in porta?",
+    "target_frame": 61,
+    "target_ms": 2115,
+    "fps": 28.83480156207429,
+    "n_frames": 121,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000954.mp4": {
+    "question": "Il pallone tocca terra prima di entrare in porta?",
+    "target_frame": 61,
+    "target_ms": 2115,
+    "fps": 28.83480156207429,
+    "n_frames": 121,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000882.mp4": {
+    "question": "Il portiere riesce a parare o bloccare il pallone?",
+    "target_frame": 54,
+    "target_ms": 1801,
+    "fps": 29.97002997002997,
+    "n_frames": 88,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000882.mp4": {
+    "question": "Il portiere riesce a parare o bloccare il pallone?",
+    "target_frame": 54,
+    "target_ms": 1801,
+    "fps": 29.97002997002997,
+    "n_frames": 88,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000960.mp4": {
+    "question": "In quale lato della porta entra il pallone (guardando lo schermo)?",
+    "target_frame": 37,
+    "target_ms": 1234,
+    "fps": 29.97002997002997,
+    "n_frames": 57,
+    "correct_answer": "no",
+    "label_yes": "SINISTRO",
+    "label_no": "DESTRO"
+  },
+  "_WorldCup00000960.mp4": {
+    "question": "In quale lato della porta entra il pallone (guardando lo schermo)?",
+    "target_frame": 37,
+    "target_ms": 1234,
+    "fps": 29.97002997002997,
+    "n_frames": 57,
+    "correct_answer": "no",
+    "label_yes": "SINISTRO",
+    "label_no": "DESTRO"
+  },
+  "WorldCup00002040.mp4": {
+    "question": "Il passaggio arriva a un compagno in maglia Bianca?",
+    "target_frame": 77,
+    "target_ms": 2569,
+    "fps": 29.97002997002997,
+    "n_frames": 126,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00002040.mp4": {
+    "question": "Il passaggio arriva a un compagno in maglia Bianca?",
+    "target_frame": 77,
+    "target_ms": 2569,
+    "fps": 29.97002997002997,
+    "n_frames": 126,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000966.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 50,
+    "target_ms": 1668,
+    "fps": 29.97002997002997,
+    "n_frames": 66,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000966.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 50,
+    "target_ms": 1668,
+    "fps": 29.97002997002997,
+    "n_frames": 66,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00001098.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 73,
+    "target_ms": 2515,
+    "fps": 29.014640066752637,
+    "n_frames": 101,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00001098.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 73,
+    "target_ms": 2515,
+    "fps": 29.014640066752637,
+    "n_frames": 101,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00001296.mp4": {
+    "question": "Verso quale lato della porta va il pallone (guardando lo schermo)?",
+    "target_frame": 83,
+    "target_ms": 2769,
+    "fps": 29.97002997002997,
+    "n_frames": 128,
+    "correct_answer": "no",
+    "label_yes": "SINISTRA",
+    "label_no": "DESTRA"
+  },
+  "_WorldCup00001296.mp4": {
+    "question": "Verso quale lato della porta va il pallone (guardando lo schermo)?",
+    "target_frame": 83,
+    "target_ms": 2769,
+    "fps": 29.97002997002997,
+    "n_frames": 128,
+    "correct_answer": "no",
+    "label_yes": "SINISTRA",
+    "label_no": "DESTRA"
+  },
+  "WorldCup00001338.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 38,
+    "target_ms": 1267,
+    "fps": 29.97002997002997,
+    "n_frames": 71,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00001338.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 38,
+    "target_ms": 1267,
+    "fps": 29.97002997002997,
+    "n_frames": 71,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00001446.mp4": {
+    "question": "Il pallone finisce fuori dal campo verso il pubblico?",
+    "target_frame": 53,
+    "target_ms": 1768,
+    "fps": 29.97002997002997,
+    "n_frames": 68,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00001446.mp4": {
+    "question": "Il pallone finisce fuori dal campo verso il pubblico?",
+    "target_frame": 53,
+    "target_ms": 1768,
+    "fps": 29.97002997002997,
+    "n_frames": 68,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00001524.mp4": {
+    "question": "Il portiere riesce a parare o bloccare il pallone?",
+    "target_frame": 51,
+    "target_ms": 1701,
+    "fps": 29.97002997002997,
+    "n_frames": 73,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00001524.mp4": {
+    "question": "Il portiere riesce a parare o bloccare il pallone?",
+    "target_frame": 51,
+    "target_ms": 1701,
+    "fps": 29.97002997002997,
+    "n_frames": 73,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00001656.mp4": {
+    "question": "Il pallone arriva al portiere o a un giocatore di movimento?",
+    "target_frame": 54,
+    "target_ms": 1801,
+    "fps": 29.97002997002997,
+    "n_frames": 88,
+    "correct_answer": "no",
+    "label_yes": "PORTIERE",
+    "label_no": "GIOCATORE"
+  },
+  "_WorldCup00001656.mp4": {
+    "question": "Il pallone arriva al portiere o a un giocatore di movimento?",
+    "target_frame": 54,
+    "target_ms": 1801,
+    "fps": 29.97002997002997,
+    "n_frames": 88,
+    "correct_answer": "no",
+    "label_yes": "PORTIERE",
+    "label_no": "GIOCATORE"
+  },
+  "WorldCup00001680.mp4": {
+    "question": "Il pallone entra in rete?",
+    "target_frame": 51,
+    "target_ms": 1701,
+    "fps": 29.97002997002997,
+    "n_frames": 69,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00001680.mp4": {
+    "question": "Il pallone entra in rete?",
+    "target_frame": 51,
+    "target_ms": 1701,
+    "fps": 29.97002997002997,
+    "n_frames": 69,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00001740.mp4": {
+    "question": "Il pallone supera la linea bianca ed esce dal campo?",
+    "target_frame": 40,
+    "target_ms": 1334,
+    "fps": 29.97002997002997,
+    "n_frames": 57,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00001740.mp4": {
+    "question": "Il pallone supera la linea bianca ed esce dal campo?",
+    "target_frame": 40,
+    "target_ms": 1334,
+    "fps": 29.97002997002997,
+    "n_frames": 57,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00001836.mp4": {
+    "question": "Il pallone entra in rete?",
+    "target_frame": 47,
+    "target_ms": 1568,
+    "fps": 29.97002997002997,
+    "n_frames": 71,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00001836.mp4": {
+    "question": "Il pallone entra in rete?",
+    "target_frame": 47,
+    "target_ms": 1568,
+    "fps": 29.97002997002997,
+    "n_frames": 71,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00002472.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 76,
+    "target_ms": 2535,
+    "fps": 29.97002997002997,
+    "n_frames": 119,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00002472.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 76,
+    "target_ms": 2535,
+    "fps": 29.97002997002997,
+    "n_frames": 119,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00002574.mp4": {
+    "question": "Verso quale lato della porta va il pallone (guardando lo schermo)?",
+    "target_frame": 68,
+    "target_ms": 2268,
+    "fps": 29.97,
+    "n_frames": 105,
+    "correct_answer": "no",
+    "label_yes": "SINISTRA",
+    "label_no": "DESTRA"
+  },
+  "WorldCup00002574.mp4": {
+    "question": "Verso quale lato della porta va il pallone (guardando lo schermo)?",
+    "target_frame": 68,
+    "target_ms": 2268,
+    "fps": 29.97,
+    "n_frames": 105,
+    "correct_answer": "no",
+    "label_yes": "SINISTRA",
+    "label_no": "DESTRA"
+  },
+  "_WorldCup00002064.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 122,
+    "target_ms": 4070,
+    "fps": 29.97,
+    "n_frames": 143,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00002064.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 122,
+    "target_ms": 4070,
+    "fps": 29.97,
+    "n_frames": 143,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_2.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 39,
+    "target_ms": 1560,
+    "fps": 25.0,
+    "n_frames": 87,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_5.mp4": {
+    "question": "Il portiere prende il pallone al volo?",
+    "target_frame": 107,
+    "target_ms": 4280,
+    "fps": 25.0,
+    "n_frames": 129,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_7.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 38,
+    "target_ms": 1520,
+    "fps": 25.0,
+    "n_frames": 95,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00000810.mp4": {
+    "question": "La squadra in maglia Bianca riesce a prendere il pallone?",
+    "target_frame": 92,
+    "target_ms": 3069,
+    "fps": 29.97,
+    "n_frames": 117,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00000810.mp4": {
+    "question": "La squadra in maglia Bianca riesce a prendere il pallone?",
+    "target_frame": 92,
+    "target_ms": 3069,
+    "fps": 29.97,
+    "n_frames": 117,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00031980.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 103,
+    "target_ms": 1718,
+    "fps": 59.94005994005994,
+    "n_frames": 297,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00031980.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 103,
+    "target_ms": 1718,
+    "fps": 59.94005994005994,
+    "n_frames": 297,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00048564.mp4": {
+    "question": "Verso quale lato della porta va il pallone (guardando lo schermo)?",
+    "target_frame": 234,
+    "target_ms": 3903,
+    "fps": 59.94005994005994,
+    "n_frames": 282,
+    "correct_answer": "yes",
+    "label_yes": "SINISTRA",
+    "label_no": "DESTRA"
+  },
+  "_WorldCup00048564.mp4": {
+    "question": "Verso quale lato della porta va il pallone (guardando lo schermo)?",
+    "target_frame": 234,
+    "target_ms": 3903,
+    "fps": 59.94005994005994,
+    "n_frames": 282,
+    "correct_answer": "yes",
+    "label_yes": "SINISTRA",
+    "label_no": "DESTRA"
+  },
+  "WorldCup00051624.mp4": {
+    "question": "Il pallone supera la linea bianca ed esce dal campo?",
+    "target_frame": 385,
+    "target_ms": 6423,
+    "fps": 59.94005994005994,
+    "n_frames": 534,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00051624.mp4": {
+    "question": "Il pallone supera la linea bianca ed esce dal campo?",
+    "target_frame": 385,
+    "target_ms": 6423,
+    "fps": 59.94005994005994,
+    "n_frames": 534,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00054120.mp4": {
+    "question": "Il pallone supera la linea bianca ed esce dal campo?",
+    "target_frame": 187,
+    "target_ms": 3119,
+    "fps": 59.94005994005994,
+    "n_frames": 361,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00054120.mp4": {
+    "question": "Il pallone supera la linea bianca ed esce dal campo?",
+    "target_frame": 187,
+    "target_ms": 3119,
+    "fps": 59.94005994005994,
+    "n_frames": 361,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00089160.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 142,
+    "target_ms": 2369,
+    "fps": 59.94005994005994,
+    "n_frames": 170,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00089160.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 142,
+    "target_ms": 2369,
+    "fps": 59.94005994005994,
+    "n_frames": 170,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00144624.mp4": {
+    "question": "Il portiere riesce a deviare il pallone lontano dalla porta?",
+    "target_frame": 140,
+    "target_ms": 2359,
+    "fps": 59.33367914311975,
+    "n_frames": 325,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00144624.mp4": {
+    "question": "Il portiere riesce a deviare il pallone lontano dalla porta?",
+    "target_frame": 140,
+    "target_ms": 2359,
+    "fps": 59.33367914311975,
+    "n_frames": 325,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00151608.mp4": {
+    "question": "Il portiere blocca saldamente il pallone?",
+    "target_frame": 465,
+    "target_ms": 7757,
+    "fps": 59.94005994005994,
+    "n_frames": 597,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00151608.mp4": {
+    "question": "Il portiere blocca saldamente il pallone?",
+    "target_frame": 465,
+    "target_ms": 7757,
+    "fps": 59.94005994005994,
+    "n_frames": 597,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00156804.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 65,
+    "target_ms": 1084,
+    "fps": 59.94005994005994,
+    "n_frames": 167,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00156804.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 65,
+    "target_ms": 1084,
+    "fps": 59.94005994005994,
+    "n_frames": 167,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00159756.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 671,
+    "target_ms": 11194,
+    "fps": 59.94005994005994,
+    "n_frames": 761,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00159756.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 671,
+    "target_ms": 11194,
+    "fps": 59.94005994005994,
+    "n_frames": 761,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "WorldCup00179760.mp4": {
+    "question": "Il pallone supera la linea bianca ed esce dal campo?",
+    "target_frame": 484,
+    "target_ms": 8074,
+    "fps": 59.94005994005994,
+    "n_frames": 537,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "_WorldCup00179760.mp4": {
+    "question": "Il pallone supera la linea bianca ed esce dal campo?",
+    "target_frame": 484,
+    "target_ms": 8074,
+    "fps": 59.94005994005994,
+    "n_frames": 537,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "2.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 39,
+    "target_ms": 1560,
+    "fps": 25.0,
+    "n_frames": 87,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "3.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 36,
+    "target_ms": 1440,
+    "fps": 25.0,
+    "n_frames": 71,
+    "correct_answer": "no",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "5.mp4": {
+    "question": "Il portiere prende il pallone al volo?",
+    "target_frame": 107,
+    "target_ms": 4280,
+    "fps": 25.0,
+    "n_frames": 129,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  },
+  "7.mp4": {
+    "question": "Il pallone entra in porta?",
+    "target_frame": 38,
+    "target_ms": 1520,
+    "fps": 25.0,
+    "n_frames": 95,
+    "correct_answer": "yes",
+    "label_yes": "SI",
+    "label_no": "NO"
+  }
+}

@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# PyInstaller / Build
+build/
+dist/
+*.bak
+
+# Dati di test e risultati generati a runtime
+test_results.csv
+survey_results.csv
+output/
+audio_responses/
+
+# Video (distribuiti a parte via ZIP su GitHub Releases)
+videos/
+videos.zip
+
+# File di sistema e IDE
+.DS_Store
+.vscode/
+.idea/
