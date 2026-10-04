@@ -84,3 +84,6 @@ DANGER = "#e0503c"
 DANGER_HOVER = "#c23f30"
 TEXT_LIGHT = "#e8e8ee"
 TEXT_MUTED = "#9a9aa8"
+
+# Cursore di puntamento per elementi interattivi (mano con indice teso: pointinghand su Mac Cocoa, hand2 su Win/Linux)
+POINTER_CURSOR = "pointinghand" if sys.platform == "darwin" else "hand2"

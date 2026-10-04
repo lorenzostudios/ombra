@@ -19,6 +19,7 @@ from ..constants import (
     TEXT_LIGHT,
     TEXT_MUTED,
     WARN,
+    POINTER_CURSOR,
 )
 from ..utils import discover_videos, video_duration_ms, counterpart_video_path
 from ..components.video_player import VideoPlayerFrame
@@ -319,7 +320,7 @@ class EditPage(ctk.CTkFrame):
             border_width=2,
             border_color=CARD_BG,
         )
-        card.pack(fill="x", pady=4, padx=2)
+        card.pack(fill="x", pady=4, padx=4)
 
         name_lbl = ctk.CTkLabel(
             card,
@@ -370,19 +371,44 @@ class EditPage(ctk.CTkFrame):
             text_color=TEXT_MUTED,
             anchor="w",
         )
+        t_lbl.pack(fill="x", padx=10, pady=(0, 10))
+
         def _on_card_enter(e):
             if not (self.current_video and self.current_video.name == vp.name):
-                card.configure(border_color="#3a3a4c")
+                card.configure(border_color="#4f4f66")
 
         def _on_card_leave(e):
             if not (self.current_video and self.current_video.name == vp.name):
+                try:
+                    px, py = card.winfo_pointerxy()
+                    rx, ry = card.winfo_rootx(), card.winfo_rooty()
+                    rw, rh = card.winfo_width(), card.winfo_height()
+                    if rx <= px < rx + rw and ry <= py < ry + rh:
+                        return
+                except Exception:
+                    pass
                 card.configure(border_color=CARD_BG)
 
-        for w in (card, name_lbl, badge, q_lbl, t_lbl):
-            w.configure(cursor="hand2")
-            w.bind("<Enter>", _on_card_enter)
-            w.bind("<Leave>", _on_card_leave)
-            w.bind("<Button-1>", lambda e, p=vp: self.load_video_into_editor(p))
+        def _bind_all(widget):
+            try:
+                widget.configure(cursor=POINTER_CURSOR)
+            except Exception:
+                pass
+            if hasattr(widget, "_canvas") and widget._canvas:
+                try:
+                    widget._canvas.configure(cursor=POINTER_CURSOR)
+                except Exception:
+                    pass
+            try:
+                widget.bind("<Enter>", _on_card_enter)
+                widget.bind("<Leave>", _on_card_leave)
+                widget.bind("<Button-1>", lambda e, p=vp: self.load_video_into_editor(p))
+            except Exception:
+                pass
+            for child in getattr(widget, "winfo_children", lambda: [])():
+                _bind_all(child)
+
+        _bind_all(card)
         self.card_widgets[vp.name] = card
 
     def _highlight_selected(self):

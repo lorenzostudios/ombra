@@ -35,6 +35,7 @@ from ..constants import (
     TEXT_LIGHT,
     TEXT_MUTED,
     AUDIO_RESPONSES_FOLDER,
+    POINTER_CURSOR,
 )
 from ..utils import open_path
 
@@ -363,7 +364,7 @@ class AudioAnalysisPage(ctk.CTkFrame):
             bg="#111118",
             bd=0,
             highlightthickness=0,
-            cursor="hand2",
+            cursor=POINTER_CURSOR,
         )
         self.canvas.grid(row=1, column=0, sticky="nsew", padx=16, pady=(0, 12))
         self.canvas.bind("<Configure>", self._on_canvas_resize)
@@ -750,7 +751,7 @@ class AudioAnalysisPage(ctk.CTkFrame):
                 border_width=1,
                 border_color=ACCENT if is_sel else CARD_BORDER,
                 corner_radius=8,
-                cursor="hand2",
+                cursor=POINTER_CURSOR,
             )
             btn.pack(fill="x", pady=2, padx=2)
 
