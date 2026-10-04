@@ -104,6 +104,7 @@ class HomePage(ctk.CTkFrame):
                 corner_radius=8,
                 border_width=1,
                 font=ctk.CTkFont(size=12),
+                cursor="hand2",
                 command=lambda o=opt: self._select_age(o),
             )
             btn.grid(
@@ -138,6 +139,7 @@ class HomePage(ctk.CTkFrame):
                 corner_radius=8,
                 border_width=1,
                 font=ctk.CTkFont(size=12),
+                cursor="hand2",
                 command=lambda o=opt: self._select_gender(o),
             )
             btn.grid(
@@ -172,6 +174,7 @@ class HomePage(ctk.CTkFrame):
                 corner_radius=8,
                 border_width=1,
                 font=ctk.CTkFont(size=12),
+                cursor="hand2",
                 command=lambda o=opt: self._select_world_cup(o),
             )
             btn.grid(
@@ -206,6 +209,7 @@ class HomePage(ctk.CTkFrame):
                 corner_radius=8,
                 border_width=1,
                 font=ctk.CTkFont(size=12),
+                cursor="hand2",
                 command=lambda o=opt: self._select_football_freq(o),
             )
             btn.grid(
@@ -238,6 +242,7 @@ class HomePage(ctk.CTkFrame):
                 corner_radius=8,
                 border_width=1,
                 font=ctk.CTkFont(size=12),
+                cursor="hand2",
                 command=lambda o=opt: self._select_mode(o),
             )
             btn.grid(
@@ -275,6 +280,7 @@ class HomePage(ctk.CTkFrame):
             fg_color=ACCENT,
             hover_color=ACCENT_HOVER,
             text_color="#06120b",
+            cursor="hand2",
             command=self._on_start,
         )
         self.btn_start.pack(fill="x", padx=18, pady=(6, 18))
@@ -306,6 +312,7 @@ class HomePage(ctk.CTkFrame):
             fg_color=BLUE,
             hover_color=BLUE_HOVER,
             text_color="#ffffff",
+            cursor="hand2",
             command=self._on_select_folder,
         ).pack(fill="x", padx=18, pady=(4, 10))
         self.lbl_counts = ctk.CTkLabel(
@@ -422,6 +429,7 @@ class HomePage(ctk.CTkFrame):
 
     def _update_tile_group(self, buttons_dict, current_val):
         for opt, btn in buttons_dict.items():
+            btn._click_animation_running = False
             if opt == current_val:
                 btn.configure(
                     fg_color=ACCENT,
@@ -429,7 +437,6 @@ class HomePage(ctk.CTkFrame):
                     border_color=ACCENT,
                     border_width=1,
                     text_color="#06120b",
-                    font=ctk.CTkFont(size=12, weight="bold"),
                 )
             else:
                 btn.configure(
@@ -438,7 +445,6 @@ class HomePage(ctk.CTkFrame):
                     border_color="#363647",
                     border_width=1,
                     text_color=TEXT_LIGHT,
-                    font=ctk.CTkFont(size=12, weight="normal"),
                 )
 
     def _update_age_buttons(self):

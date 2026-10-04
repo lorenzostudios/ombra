@@ -370,9 +370,18 @@ class EditPage(ctk.CTkFrame):
             text_color=TEXT_MUTED,
             anchor="w",
         )
-        t_lbl.pack(fill="x", padx=10, pady=(0, 8))
+        def _on_card_enter(e):
+            if not (self.current_video and self.current_video.name == vp.name):
+                card.configure(border_color="#3a3a4c")
+
+        def _on_card_leave(e):
+            if not (self.current_video and self.current_video.name == vp.name):
+                card.configure(border_color=CARD_BG)
 
         for w in (card, name_lbl, badge, q_lbl, t_lbl):
+            w.configure(cursor="hand2")
+            w.bind("<Enter>", _on_card_enter)
+            w.bind("<Leave>", _on_card_leave)
             w.bind("<Button-1>", lambda e, p=vp: self.load_video_into_editor(p))
         self.card_widgets[vp.name] = card
 
