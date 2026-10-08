@@ -1,16 +1,16 @@
 # OMBRA - Video Perception Test Application & Shadow Augmentation
 
-Applicazione desktop per la somministrazione e l'analisi di test di percezione visiva su filmati sportivi con integrazione di computer vision (YOLOv8), risposte vocali (OpenAI Whisper) e generazione di ombre sintetiche per l'aumento della percezione di profondità.
+Applicazione desktop per la somministrazione e l'analisi di test di percezione visiva su filmati sportivi con integrazione di computer vision (YOLOv8), risposte vocali (OpenAI Whisper) e generazione di ombre artificiali per l'aumento della percezione di profondità.
 
 ---
 
-## 📖 Panoramica del Progetto (Tesi)
+## 📖 Panoramica del Progetto 
 
 Il progetto nasce nell'ambito di una tesi sperimentale finalizzata a valutare l'impatto di stimoli visivi sintetici (nello specifico **ombre a terra**) sulla percezione umana della profondità e delle traiettorie tridimensionali in video sportivi (calcio/World Cup). 
 
 L'ipotesi di ricerca indaga se l'aggiunta di un'ombra artificiale proiettata al suolo:
 1. **Migliori l'accuratezza** di giudizio degli utenti rispetto a eventi critici (es. se la palla entra in porta, se rimbalza, se supera una linea, traiettoria verso destra/sinistra).
-2. **Riduca il tempo di risposta** (Response Time, RT) e favorisca una **maggiore capacità di anticipazione predittiva** rispetto al frame/millisecondo chiave dell'evento.
+2. **Riduca il tempo di risposta** e favorisca una **maggiore capacità di anticipazione predittiva** rispetto al frame/millisecondo chiave dell'evento.
 
 ### Componenti e Moduli Software
 L'applicativo è strutturato come una suite integrata suddivisa in quattro aree funzionali:
@@ -43,8 +43,6 @@ ombra/
 ├── yolov8n.pt                  # Modello compatto YOLOv8 per il tracciamento del pallone
 ├── videos/                     # Cartella contenente i video (.mp4) del test
 ├── audio_responses/            # Registrazioni audio acquisite durante i test vocali
-├── .github/workflows/          # Workflow CI/CD per compilazione e release automatica
-│   └── build-and-release.yml
 └── src/                        # Codice sorgente modulare
     ├── app.py                  # Finestra principale e routing delle schermate
     ├── constants.py            # Costanti grafiche, percorsi e configurazioni globali
