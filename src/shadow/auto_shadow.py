@@ -1,5 +1,5 @@
 """
-MIRA - Geometria Proiettiva e Omografia Campo (Auto Shadow Module)
+OMBRA - Geometria Proiettiva e Omografia Campo (Auto Shadow Module)
 Fornisce funzioni matematiche e di computer vision per:
   - Calcolo e validazione dell'omografia planare campo <-> immagine (H, H_inv).
   - Proiezione prospettica di una conica circolare dal piano campo al piano camera (H^T C H).
@@ -239,7 +239,9 @@ def shadow_track_ball_forward(frames, start_idx, start_pos, end_idx):
                 # Flow inaffidabile: estrapolazione dalla velocità
                 velocity = last_pos - prev_pos
                 extrapolated = last_pos + velocity
-                curr = np.array([[[extrapolated[0], extrapolated[1]]]], dtype=np.float32)
+                curr = np.array(
+                    [[[extrapolated[0], extrapolated[1]]]], dtype=np.float32
+                )
                 new_pos = extrapolated
         else:
             new_pos = fwd[0][0]

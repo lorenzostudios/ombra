@@ -1,5 +1,5 @@
 """
-MIRA - Gestore della Configurazione Video
+OMBRA - Gestore della Configurazione Video
 Salva e carica da JSON le annotazioni dei filmati (domande, opzioni e frame target).
 Include l'auto-inizializzazione da template interni se il file utente non è presente.
 """
@@ -8,6 +8,7 @@ import json
 import shutil
 import pathlib
 from .constants import DEFAULT_QUESTION, BUNDLE_DIR
+
 
 class ConfigManager:
     """
@@ -41,21 +42,10 @@ class ConfigManager:
             json.dumps(cfg, ensure_ascii=False, indent=2), encoding="utf-8"
         )
 
-    @staticmethod
-    def resolve(raw: dict) -> dict:
-        """Mappa i vecchi campi (goal_frame/goal_ms) sui nuovi, senza
-        forzare una domanda di default: usato per lo stato di configurazione."""
-        out = dict(raw)
-        if out.get("target_frame") is None and raw.get("goal_frame") is not None:
-            out["target_frame"] = raw["goal_frame"]
-        if out.get("target_ms") is None and raw.get("goal_ms") is not None:
-            out["target_ms"] = raw["goal_ms"]
-        return out
-
     def get_raw_resolved(self, video_path) -> dict:
         cfg = self.load()
         raw = cfg.get(pathlib.Path(video_path).name, {})
-        return self.resolve(raw)
+        return dict(raw)
 
     def get_cfg(self, video_path) -> dict:
         """Config normalizzata (con domanda di default) usata in edit/test."""

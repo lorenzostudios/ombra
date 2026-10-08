@@ -1,5 +1,5 @@
 """
-MIRA - Video Perception Test Application
+OMBRA - Video Perception Test Application
 Modulo principale dell'applicazione desktop: gestisce la finestra principale,
 la barra di navigazione superiore, il ciclo di vita delle pagine e la barra di stato.
 """
@@ -42,9 +42,10 @@ from .pages.manual_shadow_page import ManualShadowPage
 from .pages.ai_shadow_page import AIShadowPage
 from .pages.audio_analysis_page import AudioAnalysisPage
 
+
 class App(ctk.CTk):
     """
-    Finestra principale e controller dell'applicazione MIRA.
+    Finestra principale e controller dell'applicazione OMBRA.
     Gestisce lo switch dinamico delle viste (HomePage, TestPage, EditPage, ReportPage, ecc.),
     lo stato globale dell'esperimento (AppState) e il routing dei comandi.
     """
@@ -103,7 +104,6 @@ class App(ctk.CTk):
             ("manualshadow", "Ombra (manuale)"),
             ("aishadow", "Ombra (AI)"),
             ("audioanalysis", "Analisi risposte vocali"),
-
             ("report", "Risultati"),
         ]:
             b = ctk.CTkButton(

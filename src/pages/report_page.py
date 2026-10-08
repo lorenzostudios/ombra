@@ -1,5 +1,5 @@
 """
-MIRA - Dashboard Statistica e Risultati (ReportPage)
+OMBRA - Dashboard Statistica e Risultati (ReportPage)
 Visualizza l'aggregazione statistica delle risposte: confronto tra video originali e alterati,
 tempi di reazione medi, delta temporale dal frame target, accuratezza e filtri demografici.
 """
@@ -24,12 +24,14 @@ from ..constants import (
 )
 from ..utils import open_path
 
+
 class ReportPage(ctk.CTkFrame):
     """
     Dashboard interattiva per l'analisi dei risultati sperimentali.
     Elabora in tempo reale le statistiche caricate da 'test_results.csv'
     e presenta tabelle riassuntive per età, genere e interesse sportivo.
     """
+
     SHADOW_WORD_RE = re.compile(r"ombr\w*", re.IGNORECASE)
 
     def __init__(self, master, app):
@@ -457,9 +459,7 @@ class ReportPage(ctk.CTkFrame):
             self.lbl_welch.configure(text="Test t di Welch: -")
 
         if cd is not None:
-            self.lbl_cohen.configure(
-                text=f"d di Cohen:  d = {cd:.2f} (Effect Size)"
-            )
+            self.lbl_cohen.configure(text=f"d di Cohen:  d = {cd:.2f} (Effect Size)")
         else:
             self.lbl_cohen.configure(text="d di Cohen: -")
 
@@ -554,7 +554,9 @@ class ReportPage(ctk.CTkFrame):
         self._populate_per_video()
         self._populate_comments()
 
-    def _populate_demographic_table(self, table_widget, first_col_name: str, data: list):
+    def _populate_demographic_table(
+        self, table_widget, first_col_name: str, data: list
+    ):
         for w in table_widget.winfo_children():
             w.destroy()
 
@@ -628,7 +630,9 @@ class ReportPage(ctk.CTkFrame):
                 diff_txt, diff_col = "-", TEXT_MUTED
 
             cd_txt = f"{d['cohens_d']:.2f}" if d.get("cohens_d") is not None else "-"
-            grp_name = d.get("group_name") or d.get("age_group") or d.get("gender") or "-"
+            grp_name = (
+                d.get("group_name") or d.get("age_group") or d.get("gender") or "-"
+            )
 
             cells = [
                 (grp_name, TEXT_LIGHT, "bold"),
@@ -675,7 +679,9 @@ class ReportPage(ctk.CTkFrame):
 
     def _populate_football_freq_stats(self):
         data = self.app.results_mgr.stats_by_football_frequency()
-        self._populate_demographic_table(self.freq_stats_table, "Frequenza Calcio", data)
+        self._populate_demographic_table(
+            self.freq_stats_table, "Frequenza Calcio", data
+        )
 
     def _populate_per_video(self):
         for w in self.pervideo_table.winfo_children():

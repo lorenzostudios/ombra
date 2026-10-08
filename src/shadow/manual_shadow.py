@@ -1,5 +1,5 @@
 """
-MIRA - Strutture Dati ed Interpolazione Ombra Manuale (Manual Shadow Module)
+OMBRA - Strutture Dati ed Interpolazione Ombra Manuale (Manual Shadow Module)
 Gestisce i keyframe manuali, l'interpolazione temporale fluida (posizione, dimensioni, angolo,
 opacità, sfocatura gaussiana, colore BGR) e il rendering raster dell'ellisse.
 """
@@ -28,6 +28,7 @@ MANUAL_DEFAULT_PARAMS = {
 @dataclass
 class ManualKeyframe:
     """Rappresenta un singolo fotogramma chiave (keyframe) con i parametri geometrici e visivi dell'ombra."""
+
     frame: int
     x: float
     y: float

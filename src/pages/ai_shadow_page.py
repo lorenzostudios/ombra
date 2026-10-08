@@ -1,5 +1,5 @@
 """
-MIRA - Generazione Ombra IA Automatica (AIShadowPage)
+OMBRA - Generazione Ombra IA Automatica (AIShadowPage)
 Interfaccia grafica per l'elaborazione end-to-end con modelli di intelligenza artificiale
 (rilevamento YOLOv8, modello ML di traiettoria e rendering al suolo).
 """
@@ -92,7 +92,9 @@ class AIShadowPage(ctk.CTkFrame):
         body = ctk.CTkFrame(self, fg_color=BG_DARK)
         body.grid(row=1, column=0, sticky="nsew", padx=20, pady=(0, 20))
         body.grid_rowconfigure(0, weight=1)
-        body.grid_columnconfigure(0, weight=0, minsize=320)  # Colonna sinistra a larghezza fissa
+        body.grid_columnconfigure(
+            0, weight=0, minsize=320
+        )  # Colonna sinistra a larghezza fissa
         body.grid_columnconfigure(1, weight=1)  # Colonna destra player preview
 
         self._build_left_sidebar(body)
@@ -101,7 +103,9 @@ class AIShadowPage(ctk.CTkFrame):
     def _build_left_sidebar(self, parent):
         left = ctk.CTkFrame(parent, width=320, fg_color=PANEL_BG, corner_radius=12)
         left.grid(row=0, column=0, sticky="nsew", padx=(0, 12))
-        left.pack_propagate(False)  # Impedisce ai widget interni di ridimensionare la colonna
+        left.pack_propagate(
+            False
+        )  # Impedisce ai widget interni di ridimensionare la colonna
 
         ctk.CTkLabel(
             left,
@@ -254,7 +258,6 @@ class AIShadowPage(ctk.CTkFrame):
         )
         self.lbl_status.pack(fill="x", padx=16, pady=(0, 10))
 
-
         # Tasto rapido per aprire la cartella del video esportato (visibile al termine)
 
         self.btn_open_folder = ctk.CTkButton(
@@ -300,7 +303,8 @@ class AIShadowPage(ctk.CTkFrame):
             if orig_candidate.exists():
                 chosen_path = orig_candidate
                 self.app.set_status(
-                    f"Selezionato automaticamente il video originale {chosen_path.name} (per evitare doppie ombre).", "warn"
+                    f"Selezionato automaticamente il video originale {chosen_path.name} (per evitare doppie ombre).",
+                    "warn",
                 )
 
         self.video_path = chosen_path
@@ -314,11 +318,17 @@ class AIShadowPage(ctk.CTkFrame):
                 # Salva una copia immutabile e pulita dei frame originali
                 self.raw_frames = [f.copy() for f in self.player.frames]
                 self.processed_frames = []
-                self.lbl_status.configure(text=f"Caricati {n_frames} fotogrammi ({fps:.1f} FPS).")
-                self.app.set_status(f"Video {self.video_path.name} pronto per elaborazione AI.", "success")
+                self.lbl_status.configure(
+                    text=f"Caricati {n_frames} fotogrammi ({fps:.1f} FPS)."
+                )
+                self.app.set_status(
+                    f"Video {self.video_path.name} pronto per elaborazione AI.",
+                    "success",
+                )
             else:
-                self.lbl_status.configure(text="Errore durante il caricamento del video.")
-
+                self.lbl_status.configure(
+                    text="Errore durante il caricamento del video."
+                )
 
         self.player.load_video(self.video_path, on_loaded=on_loaded)
 
@@ -339,11 +349,16 @@ class AIShadowPage(ctk.CTkFrame):
         self.btn_retrain.configure(state="disabled", text="Addestramento in corso...")
         self.btn_generate.configure(state="disabled")
         self.progress_bar.set(0.1)
-        self.lbl_status.configure(text="Addestramento modello su 38 progetti in corso...")
+        self.lbl_status.configure(
+            text="Addestramento modello su 38 progetti in corso..."
+        )
 
         def train_worker():
             try:
-                from ..shadow.train_shadow_model import extract_pixel_diff_dataset_and_train
+                from ..shadow.train_shadow_model import (
+                    extract_pixel_diff_dataset_and_train,
+                )
+
                 results = extract_pixel_diff_dataset_and_train(verbose=False)
                 self._task_queue.put(("train_done", results))
             except Exception as e:  # noqa: BLE001
@@ -369,12 +384,15 @@ class AIShadowPage(ctk.CTkFrame):
                 self.fps = self.player.fps or self.fps
             elif self.video_path and self.video_path.exists():
                 from ..utils import load_video_frames as _load_vf
+
                 loaded_f, loaded_fps = _load_vf(self.video_path)
                 self.raw_frames = [f.copy() for f in loaded_f]
                 self.fps = loaded_fps
 
         if not self.raw_frames:
-            messagebox.showwarning(APP_TITLE, "Impossibile caricare i fotogrammi originali del video.")
+            messagebox.showwarning(
+                APP_TITLE, "Impossibile caricare i fotogrammi originali del video."
+            )
             return
 
         self.is_processing = True
@@ -396,7 +414,7 @@ class AIShadowPage(ctk.CTkFrame):
 
         video_in_path = self.video_path
         fps_val = self.fps
-        # CLONA SEMPRE i frame puliti originali: mai riutilizzare i frame già modificati con ombra!
+        # CLONA SEMPRE i frame puliti originali: mai riutilizzare i frame già modificati con ombra
         input_frames = [f.copy() for f in self.raw_frames]
 
         def worker():
@@ -405,7 +423,9 @@ class AIShadowPage(ctk.CTkFrame):
 
             try:
                 # 1. Pipeline di analisi, consistenza e rendering con modello ML (0% -> 85%)
-                out_frames, stats = engine.process_frames(input_frames, progress_callback=progress_cb)
+                out_frames, stats = engine.process_frames(
+                    input_frames, progress_callback=progress_cb
+                )
 
                 # 2. Esportazione automatica video MP4 (85% -> 100%)
                 if out_frames:
@@ -418,7 +438,9 @@ class AIShadowPage(ctk.CTkFrame):
                     writer = None
                     for codec in ["mp4v", "avc1", "H264", "MJPG"]:
                         fourcc = cv2.VideoWriter_fourcc(*codec)
-                        writer = cv2.VideoWriter(str(out_path), fourcc, fps_val, (w_f, h_f))
+                        writer = cv2.VideoWriter(
+                            str(out_path), fourcc, fps_val, (w_f, h_f)
+                        )
                         if writer.isOpened():
                             break
 
@@ -428,7 +450,10 @@ class AIShadowPage(ctk.CTkFrame):
                             writer.write(f)
                             if f_i % 12 == 0 or f_i == n_out - 1:
                                 pct = 0.85 + 0.14 * ((f_i + 1) / n_out)
-                                progress_cb(pct, f"Esportazione video MP4 ({f_i + 1}/{n_out})...")
+                                progress_cb(
+                                    pct,
+                                    f"Esportazione video MP4 ({f_i + 1}/{n_out})...",
+                                )
                         writer.release()
                         stats["exported_path"] = out_path
 
@@ -438,7 +463,6 @@ class AIShadowPage(ctk.CTkFrame):
 
         threading.Thread(target=worker, daemon=True).start()
         self.after(50, self._poll_ai_task)
-
 
     def _poll_ai_task(self):
         """Verifica lo stato di avanzamento del thread AI tramite coda messaggi."""
@@ -454,19 +478,25 @@ class AIShadowPage(ctk.CTkFrame):
             elif kind == "train_done":
                 res = msg[1]
                 self.is_training = False
-                self.btn_retrain.configure(state="normal", text="Riallena modello sul dataset")
+                self.btn_retrain.configure(
+                    state="normal", text="Riallena modello sul dataset"
+                )
                 self.btn_generate.configure(state="normal", text="Genera video")
                 self.progress_bar.set(1.0)
                 self.lbl_status.configure(
                     text=f"Modello riaddestrato su differenza pixel! ({res.get('n_videos', 38)} video, {res.get('n_samples', 0)} campioni pixel)"
                 )
-                self.app.set_status("Modello AI riaddestrato su dataset differenziale.", "success")
+                self.app.set_status(
+                    "Modello AI riaddestrato su dataset differenziale.", "success"
+                )
                 return
 
             elif kind == "train_error":
                 err_msg = msg[1]
                 self.is_training = False
-                self.btn_retrain.configure(state="normal", text="Riallena modello sul dataset")
+                self.btn_retrain.configure(
+                    state="normal", text="Riallena modello sul dataset"
+                )
                 self.btn_generate.configure(state="normal", text="Genera video")
                 self.lbl_status.configure(text=f"Errore addestramento: {err_msg}")
                 self.app.set_status(f"Errore riaddestramento: {err_msg}", "error")
@@ -477,7 +507,9 @@ class AIShadowPage(ctk.CTkFrame):
                 stats = msg[2]
                 self.is_processing = False
                 self.btn_generate.configure(state="normal", text="Genera video")
-                self.btn_retrain.configure(state="normal", text="Riallena modello sul dataset")
+                self.btn_retrain.configure(
+                    state="normal", text="Riallena modello sul dataset"
+                )
                 self.progress_bar.set(1.0)
 
                 pct_det = stats.get("detection_pct", 0.0)
@@ -496,15 +528,12 @@ class AIShadowPage(ctk.CTkFrame):
                 out_path = stats.get("exported_path")
                 self.exported_video_path = out_path
 
-                # Rimossa l'azione duplicata da status_text (già mostrata nel badge sopra)
                 status_text = (
                     f"Completato! Pallone rilevato: {pct_det:.0f}% ({engine_type} + ML)\n"
                     f"Esportato in: {out_path.name if out_path else 'OK'}"
                 )
 
                 self.lbl_status.configure(text=status_text)
-
-
 
                 # Mostra la preview dei frame elaborati nel player sincronizzando slider e controlli
                 if self.processed_frames:
@@ -513,24 +542,29 @@ class AIShadowPage(ctk.CTkFrame):
                 if self.exported_video_path and self.exported_video_path.exists():
                     self.btn_open_folder.pack(fill="x", padx=16, pady=(4, 12))
 
-                self.app.set_status("Generazione ed esportazione ombra AI completata con successo.", "success")
+                self.app.set_status(
+                    "Generazione ed esportazione ombra AI completata con successo.",
+                    "success",
+                )
                 return
 
             elif kind == "error":
                 err_msg = msg[1]
                 self.is_processing = False
                 self.btn_generate.configure(state="normal", text="Genera video")
-                self.btn_retrain.configure(state="normal", text="Riallena modello sul dataset")
-                self.lbl_status.configure(text=f"Errore durante l'elaborazione: {err_msg}")
+                self.btn_retrain.configure(
+                    state="normal", text="Riallena modello sul dataset"
+                )
+                self.lbl_status.configure(
+                    text=f"Errore durante l'elaborazione: {err_msg}"
+                )
                 self.app.set_status(f"Errore elaborazione: {err_msg}", "error")
                 return
-
 
         if self.is_processing or self.is_training:
             self.after(50, self._poll_ai_task)
 
     def _open_output_folder(self):
-
         """Apre la cartella di esportazione con il file generato."""
         if self.exported_video_path and self.exported_video_path.exists():
             open_path(self.exported_video_path.parent)

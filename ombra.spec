@@ -66,7 +66,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='MIRA',
+    name='OMBRA',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -87,17 +87,17 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='MIRA',
+    name='OMBRA',
 )
 
 if sys.platform == 'darwin':
     app = BUNDLE(
         coll,
-        name='MIRA.app',
+        name='OMBRA.app',
         icon=None,
-        bundle_identifier='com.mira.videoperception',
+        bundle_identifier='com.ombra.videoperception',
         info_plist={
             'NSHighResolutionCapable': 'True',
-            'NSMicrophoneUsageDescription': 'MIRA richiede l\'accesso al microfono per le risposte vocali.',
+            'NSMicrophoneUsageDescription': 'OMBRA richiede l\'accesso al microfono per le risposte vocali.',
         },
     )

@@ -1,5 +1,5 @@
 """
-MIRA - Motore di Acquisizione Vocale e Riconoscimento (Whisper)
+OMBRA - Motore di Acquisizione Vocale e Riconoscimento (Whisper)
 Gestisce la registrazione audio asincrona dal microfono (sounddevice/soundfile),
 il preprocessing del segnale (rimozione DC offset, peak normalization),
 il calcolo preciso dell'istante di onset vocale (RMS energy peak onset in NumPy)
@@ -80,6 +80,7 @@ _HALLUCINATION_PATTERNS = [
     "subscribed",
 ]
 
+
 def _is_hallucination(text: str) -> bool:
     """Verifica se il testo trascritto è una tipica allucinazione di sottotitoli di Whisper."""
     if not text:
@@ -89,25 +90,44 @@ def _is_hallucination(text: str) -> bool:
     if any(pat in t_clean for pat in _HALLUCINATION_PATTERNS):
         # Verifica se l'utente ha comunque pronunciato una parola valida per il task
         valid_words = {
-            "si", "sì", "no", "yes", "destra", "sinistra", "dentro", "fuori",
-            "propria", "avversaria", "portiere", "giocatore", "bianco", "bianca",
-            "rosso", "rossa", "blu", "azzurra", "gialla", "gol", "testa"
+            "si",
+            "sì",
+            "no",
+            "yes",
+            "destra",
+            "sinistra",
+            "dentro",
+            "fuori",
+            "propria",
+            "avversaria",
+            "portiere",
+            "giocatore",
+            "bianco",
+            "bianca",
+            "rosso",
+            "rossa",
+            "blu",
+            "azzurra",
+            "gialla",
+            "gol",
+            "testa",
         }
         tokens = {_normalize_word(w) for w in t_clean.split() if _normalize_word(w)}
         if not (tokens & valid_words):
             return True
     return False
 
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Normalizzazione e matching
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 def _normalize_word(w: str) -> str:
     """Minuscolo, senza accenti diacritici, senza punteggiatura ai bordi."""
     w = w.strip().lower()
     # Rimuovi diacritici (à→a, è→e, ì→i, ecc.)
     w = "".join(
-
         c for c in unicodedata.normalize("NFD", w) if unicodedata.category(c) != "Mn"
     )
     # Rimuovi apostrofi, punteggiatura e spazi residui
@@ -127,11 +147,13 @@ def _levenshtein_distance(a: str, b: str) -> int:
     for i, ca in enumerate(a):
         new_row = [i + 1]
         for j, cb in enumerate(b):
-            new_row.append(min(
-                row[j + 1] + 1,
-                new_row[j] + 1,
-                row[j] + (0 if ca == cb else 1),
-            ))
+            new_row.append(
+                min(
+                    row[j + 1] + 1,
+                    new_row[j] + 1,
+                    row[j] + (0 if ca == cb else 1),
+                )
+            )
         row = new_row
     return row[-1]
 
@@ -165,13 +187,37 @@ def match_voice_answer(transcript_text, words, label_yes, label_no):
 
     # Alias per il caso classico SI/NO italiano
     yes_aliases = {
-        "si", "si'", "sì", "yes", "gia", "già", "esatto", "esattamente",
-        "affermativo", "certo", "certamente", "sicuro", "sicuramente",
-        "assolutamente", "confermo", "giusto", "corretto", "ok", "dai",
+        "si",
+        "si'",
+        "sì",
+        "yes",
+        "gia",
+        "già",
+        "esatto",
+        "esattamente",
+        "affermativo",
+        "certo",
+        "certamente",
+        "sicuro",
+        "sicuramente",
+        "assolutamente",
+        "confermo",
+        "giusto",
+        "corretto",
+        "ok",
+        "dai",
     }
     no_aliases = {
-        "no", "nope", "non", "negativo", "niente", "mai",
-        "sbagliato", "errato", "falso", "negato",
+        "no",
+        "nope",
+        "non",
+        "negativo",
+        "niente",
+        "mai",
+        "sbagliato",
+        "errato",
+        "falso",
+        "negato",
     }
 
     # Determina se stiamo usando le etichette classiche SI/NO
@@ -245,6 +291,7 @@ def match_voice_answer(transcript_text, words, label_yes, label_no):
 # Pre-processing audio
 # ─────────────────────────────────────────────────────────────────────────────
 
+
 def _preprocess_audio(audio: np.ndarray, sr: int = VOICE_SAMPLE_RATE) -> np.ndarray:
     """Preprocessing leggero per migliorare la trascrizione:
     1. Rimuovi DC offset
@@ -264,14 +311,16 @@ def _preprocess_audio(audio: np.ndarray, sr: int = VOICE_SAMPLE_RATE) -> np.ndar
         audio = audio / peak * 0.95
 
     # 3. Trim silenzio: rimuovi sezioni con energia RMS < soglia
-    win = max(1, int(sr * 0.02))   # finestra 20ms
+    win = max(1, int(sr * 0.02))  # finestra 20ms
     hop = max(1, win // 2)
     n_wins = (len(audio) - win) // hop + 1
     if n_wins > 1:
-        rms = np.array([
-            np.sqrt(np.mean(audio[i * hop: i * hop + win] ** 2))
-            for i in range(n_wins)
-        ])
+        rms = np.array(
+            [
+                np.sqrt(np.mean(audio[i * hop : i * hop + win] ** 2))
+                for i in range(n_wins)
+            ]
+        )
         threshold = max(0.01, np.max(rms) * 0.05)
         active = np.where(rms >= threshold)[0]
         if len(active) > 0:
@@ -294,6 +343,7 @@ def _preprocess_audio(audio: np.ndarray, sr: int = VOICE_SAMPLE_RATE) -> np.ndar
 # ─────────────────────────────────────────────────────────────────────────────
 # Engine principale
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 class VoiceAnswerEngine:
     """Incapsula registrazione microfono (sounddevice), rilevazione
@@ -396,9 +446,10 @@ class VoiceAnswerEngine:
                     )
         return raw_text, words
 
-
     @staticmethod
-    def detect_onset_sec(audio: np.ndarray, word_start: float = None, word_end: float = None):
+    def detect_onset_sec(
+        audio: np.ndarray, word_start: float = None, word_end: float = None
+    ):
         """Calcola l'onset fisico dell'inviluppo audio (RMS energy peak onset).
         Se vengono forniti word_start/word_end da Whisper, analizza l'inviluppo RMS
         attorno alla parola per individuare l'istante esatto di inizio dell'emissione vocale.
@@ -420,22 +471,26 @@ class VoiceAnswerEngine:
         if len(segment) == 0:
             return word_start
 
-        win_size = int(sr * 0.02)  # 20ms window (era 30ms — più reattivo)
-        hop_size = int(sr * 0.005)  # 5ms hop (era 10ms — più preciso)
+        win_size = int(sr * 0.02)  # 20ms window
+        hop_size = int(sr * 0.005)  # 5ms hop
         n_wins = (len(segment) - win_size) // hop_size + 1
         if n_wins <= 0:
             return word_start
 
-        rms_vals = np.array([
-            np.sqrt(np.mean(segment[i * hop_size: i * hop_size + win_size] ** 2))
-            for i in range(n_wins)
-        ])
+        rms_vals = np.array(
+            [
+                np.sqrt(np.mean(segment[i * hop_size : i * hop_size + win_size] ** 2))
+                for i in range(n_wins)
+            ]
+        )
 
         max_rms = np.max(rms_vals)
-        if max_rms < 0.015:  # soglia abbassata da 0.02 → meno falsi negativi su voci piano
+        if (
+            max_rms < 0.015
+        ):
             return word_start
 
-        # Soglia onset: 18% del picco RMS (era 22% — cattura l'attacco vocale prima)
+        # Soglia onset: 18% del picco RMS
         thresh = max(0.015, max_rms * 0.18)
         above = np.where(rms_vals >= thresh)[0]
         if len(above) == 0:

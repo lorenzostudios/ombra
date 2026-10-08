@@ -1,5 +1,5 @@
 """
-MIRA - Video Perception Test Application
+OMBRA - Video Perception Test Application
 Main entry point launcher script.
 """
 

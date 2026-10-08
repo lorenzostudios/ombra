@@ -1,5 +1,5 @@
 """
-MIRA - Motore IA di Generazione Ombre (AIShadowEngine)
+OMBRA - Motore IA di Generazione Ombre (AIShadowEngine)
 Pipeline:
   1. Segmentazione del campo da gioco (isolamento del terreno verde, esclusione spalti).
   2. Estrazione multi-sorgente ad alte prestazioni (YOLOv8 + differenze temporali di moto + CV).
@@ -21,6 +21,7 @@ from .shadow_ml import ShadowMLModel
 
 try:
     from ultralytics import YOLO
+
     _ULTRALYTICS_OK = True
 except Exception:
     _ULTRALYTICS_OK = False
@@ -52,11 +53,14 @@ class AIShadowEngine:
     @classmethod
     def get_model_info(cls) -> str:
         ml = cls.get_ml_model()
-        trained_tag = f" + ML Shadow Model (Addestrato su {ml.params.get('n_training_videos', 38)} Video)" if ml.is_trained else ""
+        trained_tag = (
+            f" + ML Shadow Model (Addestrato su {ml.params.get('n_training_videos', 38)} Video)"
+            if ml.is_trained
+            else ""
+        )
         if cls.is_yolo_available():
             return f"Modello AI: YOLOv8 ({AI_SHADOW_MODEL_NAME}){trained_tag}"
         return f"Modello AI: Computer Vision Engine{trained_tag}"
-
 
     @classmethod
     def _load_yolo_model(cls):
@@ -78,7 +82,6 @@ class AIShadowEngine:
         self.shadow_size = max(1, int(shadow_size))
         self.shadow_opacity = float(np.clip(shadow_opacity, 0.01, 1.0))
         self.ml_model = self.get_ml_model()
-
 
     @classmethod
     def detect_pitch_boundary(cls, frames: List[np.ndarray]) -> int:
@@ -107,7 +110,9 @@ class AIShadowEngine:
         return 0
 
     @classmethod
-    def find_static_pitch_landmarks(cls, frames: List[np.ndarray], min_pitch_y: int = 0) -> List[Tuple[float, float, float]]:
+    def find_static_pitch_landmarks(
+        cls, frames: List[np.ndarray], min_pitch_y: int = 0
+    ) -> List[Tuple[float, float, float]]:
         """
         Rileva e mappa tutti i punti bianchi fissi del campo (dischetti del rigore, centrocampo,
         segni fissi del terreno) confrontando i fotogrammi nel tempo per evitare falsi positivi.
@@ -117,7 +122,9 @@ class AIShadowEngine:
 
         n = len(frames)
         sample_indices = np.linspace(0, n - 1, min(10, n), dtype=int)
-        sample_grays = [cv2.cvtColor(frames[i], cv2.COLOR_BGR2GRAY) for i in sample_indices]
+        sample_grays = [
+            cv2.cvtColor(frames[i], cv2.COLOR_BGR2GRAY) for i in sample_indices
+        ]
 
         stack = np.stack(sample_grays, axis=0).astype(np.float32)
         temporal_std = np.std(stack, axis=0)
@@ -128,12 +135,16 @@ class AIShadowEngine:
         mid_frame = frames[mid_idx]
         hsv = cv2.cvtColor(mid_frame, cv2.COLOR_BGR2HSV)
         grass_mask = cv2.inRange(hsv, (28, 25, 25), (88, 255, 255))
-        _, bright = cv2.threshold(sample_grays[len(sample_grays) // 2], 185, 255, cv2.THRESH_BINARY)
+        _, bright = cv2.threshold(
+            sample_grays[len(sample_grays) // 2], 185, 255, cv2.THRESH_BINARY
+        )
 
         static_spots_mask = cv2.bitwise_and(bright, bright, mask=static_mask)
         static_spots_mask = cv2.bitwise_and(static_spots_mask, grass_mask)
 
-        contours, _ = cv2.findContours(static_spots_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(
+            static_spots_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+        )
         landmarks = []
         for cnt in contours:
             area = cv2.contourArea(cnt)
@@ -181,19 +192,25 @@ class AIShadowEngine:
             model = self._load_yolo_model()
             if model is not None:
                 try:
-                    results = model.predict(frame, verbose=False, conf=self.confidence_thresh, imgsz=640)
+                    results = model.predict(
+                        frame, verbose=False, conf=self.confidence_thresh, imgsz=640
+                    )
                     for r in results:
                         for box in r.boxes:
                             cls_id = int(box.cls[0].item())
                             conf = float(box.conf[0].item())
-                            if cls_id == AI_BALL_CLASS_ID or (conf > 0.10 and cls_id == 32):
+                            if cls_id == AI_BALL_CLASS_ID or (
+                                conf > 0.10 and cls_id == 32
+                            ):
                                 x1, y1, x2, y2 = box.xyxy[0].tolist()
                                 bw, bh = x2 - x1, y2 - y1
                                 if 2 < bw < 80 and 2 < bh < 80:
                                     cx = (x1 + x2) * 0.5
                                     cy = (y1 + y2) * 0.5
                                     if cy >= min_pitch_y and not _is_landmark(cx, cy):
-                                        candidates.append((float(cx), float(cy), float(conf * 6.0)))
+                                        candidates.append(
+                                            (float(cx), float(cy), float(conf * 6.0))
+                                        )
                 except Exception:
                     pass
 
@@ -212,12 +229,18 @@ class AIShadowEngine:
             ball_mask_dark = cv2.bitwise_and(motion_thresh, dark)
             ball_mask = cv2.bitwise_or(ball_mask, ball_mask_dark)
 
-            cnts, _ = cv2.findContours(ball_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            cnts, _ = cv2.findContours(
+                ball_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+            )
             for cnt in cnts:
                 area = cv2.contourArea(cnt)
                 if 3 < area < 700:
                     (cx, cy), r = cv2.minEnclosingCircle(cnt)
-                    if 1.5 <= r <= 22.0 and cy >= min_pitch_y and not _is_landmark(cx, cy):
+                    if (
+                        1.5 <= r <= 22.0
+                        and cy >= min_pitch_y
+                        and not _is_landmark(cx, cy)
+                    ):
                         circ = area / (np.pi * max(r, 0.1) ** 2)
                         if circ > 0.18:
                             candidates.append((float(cx), float(cy), float(circ * 3.0)))
@@ -233,7 +256,11 @@ class AIShadowEngine:
                 area = cv2.contourArea(cnt)
                 if 3 < area < 600:
                     (cx, cy), r = cv2.minEnclosingCircle(cnt)
-                    if 1.5 <= r <= 20.0 and cy >= min_pitch_y and not _is_landmark(cx, cy):
+                    if (
+                        1.5 <= r <= 20.0
+                        and cy >= min_pitch_y
+                        and not _is_landmark(cx, cy)
+                    ):
                         circ = area / (np.pi * max(r, 0.1) ** 2)
                         if circ > 0.20:
                             candidates.append((float(cx), float(cy), float(circ * 2.0)))
@@ -243,7 +270,9 @@ class AIShadowEngine:
         # Luminosità bassa soglia (palloni parzialmente in ombra)
         _, bright_lo = cv2.threshold(curr_gray, 150, 255, cv2.THRESH_BINARY)
         cand_mask = cv2.bitwise_and(field_objs, bright_lo)
-        cnts, _ = cv2.findContours(cand_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cnts, _ = cv2.findContours(
+            cand_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+        )
         for cnt in cnts:
             area = cv2.contourArea(cnt)
             if 4 < area < 700:
@@ -295,12 +324,11 @@ class AIShadowEngine:
                 merged.append(ci)
                 for j, cj in enumerate(candidates_sorted):
                     if not used[j] and i != j:
-                        if (ci[0] - cj[0]) ** 2 + (ci[1] - cj[1]) ** 2 < 18 ** 2:
+                        if (ci[0] - cj[0]) ** 2 + (ci[1] - cj[1]) ** 2 < 18**2:
                             used[j] = True
             candidates = merged
 
         return candidates
-
 
     def find_dominant_ball_trajectory(
         self,
@@ -347,10 +375,12 @@ class AIShadowEngine:
         detection_ratio = n_frames_with_cands / max(1, n)
 
         # 3. Costruzione tracklet con parametri adattativi (strict → loose)
-        def _build_tracks(max_gap: int, min_track_len: int, max_link_dist: float, max_speed: float):
+        def _build_tracks(
+            max_gap: int, min_track_len: int, max_link_dist: float, max_speed: float
+        ):
             tracks = []
-            mls = max_link_dist ** 2
-            mss = max_speed ** 2
+            mls = max_link_dist**2
+            mss = max_speed**2
             for t_start in range(n):
                 for c_start in frame_candidates[t_start]:
                     track = {t_start: c_start}
@@ -398,7 +428,11 @@ class AIShadowEngine:
                         xs = [p[0] for p in track.values()]
                         ys = [p[1] for p in track.values()]
                         span = max(max(xs) - min(xs), max(ys) - min(ys))
-                        score = len(track) * float(np.mean([p[2] for p in track.values()])) * (1.0 + span * 0.008)
+                        score = (
+                            len(track)
+                            * float(np.mean([p[2] for p in track.values()]))
+                            * (1.0 + span * 0.008)
+                        )
                         tracks.append((track, score))
             return tracks
 
@@ -406,14 +440,20 @@ class AIShadowEngine:
             progress_callback(0.47, "Collegamento traiettoria (pass 1)...")
 
         # Pass 1: Strict
-        all_tracks = _build_tracks(max_gap=3, min_track_len=5, max_link_dist=60.0, max_speed=80.0)
+        all_tracks = _build_tracks(
+            max_gap=3, min_track_len=5, max_link_dist=60.0, max_speed=80.0
+        )
 
         # Pass 2: Loose (se copertura < 40%)
         best_coverage_pass1 = max((len(tr[0]) for tr in all_tracks), default=0)
         if best_coverage_pass1 < max(5, n * 0.25):
             if progress_callback:
-                progress_callback(0.49, "Collegamento traiettoria (pass 2 — permissivo)...")
-            loose_tracks = _build_tracks(max_gap=6, min_track_len=3, max_link_dist=85.0, max_speed=100.0)
+                progress_callback(
+                    0.49, "Collegamento traiettoria (pass 2 — permissivo)..."
+                )
+            loose_tracks = _build_tracks(
+                max_gap=6, min_track_len=3, max_link_dist=85.0, max_speed=100.0
+            )
             all_tracks.extend(loose_tracks)
 
         if not all_tracks:
@@ -428,11 +468,16 @@ class AIShadowEngine:
                 all_tracks.append((best_points, float(len(best_points))))
             else:
                 # Nessun rilevamento: ritorna struttura vuota
-                return np.zeros(n), np.zeros(n), np.zeros(n, dtype=bool), {
-                    "initial_detected": 0,
-                    "valid_points": 0,
-                    "status": "Nessun candidato pallone trovato",
-                }
+                return (
+                    np.zeros(n),
+                    np.zeros(n),
+                    np.zeros(n, dtype=bool),
+                    {
+                        "initial_detected": 0,
+                        "valid_points": 0,
+                        "status": "Nessun candidato pallone trovato",
+                    },
+                )
 
         # 4. Selezione della traiettoria dominante
         all_tracks.sort(key=lambda tr: tr[1], reverse=True)
@@ -456,22 +501,26 @@ class AIShadowEngine:
         if min_f > 0 and len(known_t) >= 2:
             # Velocità iniziale (media delle prime differenze, max 4 punti)
             n_pts = min(4, len(known_t) - 1)
-            vel_x0 = float(np.mean(np.diff(known_x[:n_pts + 1])))
-            vel_y0 = float(np.mean(np.diff(known_y[:n_pts + 1])))
+            vel_x0 = float(np.mean(np.diff(known_x[: n_pts + 1])))
+            vel_y0 = float(np.mean(np.diff(known_y[: n_pts + 1])))
             for i in range(min_f - 1, -1, -1):
                 dt = min_f - i
                 interp_x[i] = float(np.clip(known_x[0] - vel_x0 * dt, 0, w_frame))
-                interp_y[i] = float(np.clip(known_y[0] - vel_y0 * dt, min_pitch_y, h_frame))
+                interp_y[i] = float(
+                    np.clip(known_y[0] - vel_y0 * dt, min_pitch_y, h_frame)
+                )
 
         if max_f < n - 1 and len(known_t) >= 2:
             # Velocità finale
             n_pts = min(4, len(known_t) - 1)
-            vel_xn = float(np.mean(np.diff(known_x[-n_pts - 1:])))
-            vel_yn = float(np.mean(np.diff(known_y[-n_pts - 1:])))
+            vel_xn = float(np.mean(np.diff(known_x[-n_pts - 1 :])))
+            vel_yn = float(np.mean(np.diff(known_y[-n_pts - 1 :])))
             for i in range(max_f + 1, n):
                 dt = i - max_f
                 interp_x[i] = float(np.clip(known_x[-1] + vel_xn * dt, 0, w_frame))
-                interp_y[i] = float(np.clip(known_y[-1] + vel_yn * dt, min_pitch_y, h_frame))
+                interp_y[i] = float(
+                    np.clip(known_y[-1] + vel_yn * dt, min_pitch_y, h_frame)
+                )
 
         # 6. Smoothing Gaussiano (finestra adattiva alla lunghezza del video)
         win = min(9, max(3, n // 8) | 1)  # sempre dispari
@@ -506,7 +555,6 @@ class AIShadowEngine:
         }
 
         return smooth_x, smooth_y, valid_mask, stats
-
 
     @staticmethod
     def estimate_field_perspective(frames: List[np.ndarray]) -> Tuple[float, float]:
@@ -558,7 +606,9 @@ class AIShadowEngine:
                     if abs(angle_deg) <= 25.0:
                         horizontal_angles.append(angle_deg)
                     elif 30.0 <= abs(angle_deg) <= 75.0:
-                        ratio = np.clip(np.abs(np.sin(np.deg2rad(angle_deg))), 0.28, 0.45)
+                        ratio = np.clip(
+                            np.abs(np.sin(np.deg2rad(angle_deg))), 0.28, 0.45
+                        )
                         slanted_ratios.append(ratio)
 
         tilt_angle = float(np.median(horizontal_angles)) if horizontal_angles else 0.0
@@ -590,7 +640,9 @@ class AIShadowEngine:
             progress_callback(0.04, "Analisi prospettiva e delimitazione campo...")
         field_tilt, field_aspect = self.estimate_field_perspective(frames)
         min_pitch_y = self.detect_pitch_boundary(frames)
-        static_landmarks = self.find_static_pitch_landmarks(frames, min_pitch_y=min_pitch_y)
+        static_landmarks = self.find_static_pitch_landmarks(
+            frames, min_pitch_y=min_pitch_y
+        )
 
         # Step 2a: Rilevamento con vincolo campo (5% -> 52%)
         ball_xs, ball_ys, valid_mask, c_stats = self.find_dominant_ball_trajectory(
@@ -628,12 +680,19 @@ class AIShadowEngine:
 
         # Step 3: Ricostruzione del percorso dell'ombra al suolo e Action Recognition (52% -> 55%)
         if progress_callback:
-            progress_callback(0.52, "Calcolo traiettoria, Action Recognition ed ellisse...")
+            progress_callback(
+                0.52, "Calcolo traiettoria, Action Recognition ed ellisse..."
+            )
         gx, gy, heights = self.ml_model.predict_ground_trajectory(
-            ball_xs, ball_ys, valid_mask, field_tilt=field_tilt, field_aspect=field_aspect
+            ball_xs,
+            ball_ys,
+            valid_mask,
+            field_tilt=field_tilt,
+            field_aspect=field_aspect,
         )
 
         from .shadow_ml import classify_trajectory_action
+
         action_info = classify_trajectory_action(ball_xs, ball_ys, heights, valid_mask)
         action_type = action_info.get("action_type")
 
@@ -702,7 +761,6 @@ class AIShadowEngine:
             "action_info": action_info,
         }
 
-
     def _render_shadow_params(
         self,
         frame: np.ndarray,
@@ -733,7 +791,9 @@ class AIShadowEngine:
         blur = max(1, blur)
 
         mask = np.zeros((h_img, w_img), dtype=np.uint8)
-        cv2.ellipse(mask, (cx_i, cy_i), (max(1, rx), max(1, ry)), float(angle), 0, 360, 255, -1)
+        cv2.ellipse(
+            mask, (cx_i, cy_i), (max(1, rx), max(1, ry)), float(angle), 0, 360, 255, -1
+        )
         if blur > 1:
             mask = cv2.GaussianBlur(mask, (blur, blur), 0)
 
@@ -748,4 +808,3 @@ class AIShadowEngine:
             ).astype(np.uint8)
 
         return frame
-

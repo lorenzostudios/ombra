@@ -1,5 +1,5 @@
 """
-MIRA - Gestore dei Risultati Sperimentali e Statistiche
+OMBRA - Gestore dei Risultati Sperimentali e Statistiche
 Modulo dedicato alla persistenza su CSV dei trial e dei questionari, al calcolo
 delle metriche di percezione visiva (tempi di reazione, accuratezza, delta temporali)
 e all'analisi statistica per fasce demografiche e tipologie video.
@@ -10,12 +10,14 @@ import math
 import pathlib
 import unicodedata
 
+
 class ResultsManager:
     """
     Gestisce l'archiviazione e l'elaborazione statistica dei dati sperimentali.
     Scrive e legge 'test_results.csv' e 'survey_results.csv', calcola medie e tassi
     di riconoscimento per video originali e alterati, e produce i riepiloghi per la pagina Report.
     """
+
     FIELDS = [
         "timestamp",
         "participant_name",
@@ -71,7 +73,15 @@ class ResultsManager:
             with open(self.results_file, "r", encoding="utf-8") as f:
                 reader = csv.reader(f)
                 header = next(reader, None)
-            if header and any(col not in header for col in ("age_group", "gender", "world_cup_2026", "football_frequency")):
+            if header and any(
+                col not in header
+                for col in (
+                    "age_group",
+                    "gender",
+                    "world_cup_2026",
+                    "football_frequency",
+                )
+            ):
                 rows = self.load_results()
                 with open(self.results_file, "w", newline="", encoding="utf-8") as f:
                     w = csv.DictWriter(f, fieldnames=self.FIELDS, extrasaction="ignore")
@@ -136,26 +146,31 @@ class ResultsManager:
     ) -> bool:
         """Aggiorna i dati di un trial specifico nel file CSV dopo una correzione manuale.
         Usa criteri multipli ad alta precisione (timestamp, path relativo sotto audio_responses,
-        path canonico, partecipante + trial_index + sessione) per evitare collisioni di nomi."""
+        path canonico, partecipante + trial_index + sessione) per evitare collisioni di nomi.
+        """
         rows = self.load_results()
         if not rows:
             return False
 
         criteria = match_criteria or {}
         target_timestamp = str(criteria.get("timestamp", "")).strip()
-        target_path_norm = self._normalize_path(audio_file_name or criteria.get("audio_path", ""))
+        target_path_norm = self._normalize_path(
+            audio_file_name or criteria.get("audio_path", "")
+        )
         target_rel = self._extract_audio_rel(target_path_norm)
         target_name = pathlib.Path(target_path_norm).name if target_path_norm else ""
 
-        target_pname = str(
-            criteria.get("participant_name")
-            or updated_dict.get("participant_name")
-            or ""
-        ).strip().lower()
+        target_pname = (
+            str(
+                criteria.get("participant_name")
+                or updated_dict.get("participant_name")
+                or ""
+            )
+            .strip()
+            .lower()
+        )
         target_trial = str(
-            criteria.get("trial_index")
-            or updated_dict.get("trial_index")
-            or ""
+            criteria.get("trial_index") or updated_dict.get("trial_index") or ""
         ).strip()
         target_seed = str(criteria.get("session_seed") or "").strip()
         target_vname = str(criteria.get("video_filename") or "").strip().lower()
@@ -170,7 +185,7 @@ class ResultsManager:
                     matched_row = r
                     break
 
-        # Priorità 2: Match su path relativo sotto audio_responses/ (es. "15 - Nives/7_WorldCup...wav")
+        # Priorità 2: Match su path relativo sotto audio_responses/ (es. "15 - Lorenzo/7_WorldCup...wav")
         if matched_row is None and target_rel:
             for r in rows:
                 af = r.get("audio_file", "").strip()
@@ -283,7 +298,7 @@ class ResultsManager:
             if len(rt) > 1
             else (0.0 if len(rt) == 1 else None)
         )
-        std_rt = (var_rt ** 0.5) if var_rt is not None else None
+        std_rt = (var_rt**0.5) if var_rt is not None else None
 
         mean_dm = (sum(dm) / len(dm)) if dm else None
         var_dm = (
@@ -291,7 +306,7 @@ class ResultsManager:
             if len(dm) > 1
             else (0.0 if len(dm) == 1 else None)
         )
-        std_dm = (var_dm ** 0.5) if var_dm is not None else None
+        std_dm = (var_dm**0.5) if var_dm is not None else None
 
         return {
             "n_trials": n,
@@ -504,7 +519,9 @@ class ResultsManager:
         if not rows:
             return []
 
-        fallback_label = "Non specificata" if field_name == "age_group" else "Non specificato"
+        fallback_label = (
+            "Non specificata" if field_name == "age_group" else "Non specificato"
+        )
 
         groups = {}
         for r in rows:
@@ -523,7 +540,10 @@ class ResultsManager:
                 if opt in groups:
                     sorted_keys.append(opt)
         for opt in groups:
-            if opt not in sorted_keys and opt not in ("Non specificato", "Non specificata"):
+            if opt not in sorted_keys and opt not in (
+                "Non specificato",
+                "Non specificata",
+            ):
                 sorted_keys.append(opt)
         for fb in ("Non specificato", "Non specificata"):
             if fb in groups and fb not in sorted_keys:
@@ -589,9 +609,13 @@ class ResultsManager:
     def stats_by_world_cup(self) -> list:
         """Calcola le metriche suddivise per interesse World Cup 2026 (Originali vs Alterati)."""
         wc_order = ["Sì", "No"]
-        return self.stats_by_demographic("world_cup_2026", wc_order, label_key="world_cup_2026")
+        return self.stats_by_demographic(
+            "world_cup_2026", wc_order, label_key="world_cup_2026"
+        )
 
     def stats_by_football_frequency(self) -> list:
         """Calcola le metriche suddivise per frequenza partite di calcio (Originali vs Alterati)."""
         freq_order = ["Mai", "2/3 all'anno", "1 al mese", "Spesso"]
-        return self.stats_by_demographic("football_frequency", freq_order, label_key="football_frequency")
+        return self.stats_by_demographic(
+            "football_frequency", freq_order, label_key="football_frequency"
+        )

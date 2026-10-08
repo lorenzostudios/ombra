@@ -1,5 +1,5 @@
 """
-MIRA - Costanti e Configurazioni Globali
+OMBRA - Costanti e Configurazioni Globali
 Definisce la palette dei colori (UI dark modern), le impostazioni predefinite dei test,
 i percorsi dei file (compatibili con PyInstaller e sorgente) e i controlli di disponibilità hardware.
 """
@@ -10,13 +10,15 @@ import pathlib
 # Verifiche di disponibilità dei moduli per la risposta vocale e trascrizione (Whisper/sounddevice).
 try:
     import sounddevice as sd  # noqa: F401
-    import soundfile as sf    # noqa: F401
+    import soundfile as sf  # noqa: F401
+
     _SOUNDDEVICE_OK = True
 except Exception:
     _SOUNDDEVICE_OK = False
 
 try:
     import whisper as _whisper_lib  # noqa: F401
+
     _WHISPER_OK = True
 except Exception:
     _WHISPER_OK = False
@@ -39,7 +41,7 @@ else:
 BUNDLE_DIR = pathlib.Path(getattr(sys, "_MEIPASS", BASE_DIR))
 
 # Impostazioni generali dell'applicazione, percorsi di salvataggio e file di configurazione.
-APP_TITLE = "MIRA"
+APP_TITLE = "OMBRA"
 DEFAULT_VIDEO_FOLDER = BASE_DIR / "videos"
 N_TRIALS = 10
 RESULTS_FILE = BASE_DIR / "test_results.csv"
@@ -56,7 +58,7 @@ MANUAL_PROJECT_SUFFIX = "_shadow_project.json"
 # Parametri audio per l'acquisizione dal microfono e la trascrizione con Whisper.
 AUDIO_RESPONSES_FOLDER = BASE_DIR / "audio_responses"
 VOICE_SAMPLE_RATE = 16000
-WHISPER_MODEL_NAME = "small"   # "small" = ~3× più preciso di "base" per l'italiano; "medium" se si preferisce più precisione a scapito della velocità
+WHISPER_MODEL_NAME = "small"  # "small" = ~3× più preciso di "base" per l'italiano; "medium" se si preferisce più precisione a scapito della velocità
 
 # Parametri del modello AI per il rilevamento del pallone e del campo.
 _LOCAL_YOLO = BASE_DIR / "yolov8n.pt"
@@ -85,5 +87,5 @@ DANGER_HOVER = "#c23f30"
 TEXT_LIGHT = "#e8e8ee"
 TEXT_MUTED = "#9a9aa8"
 
-# Cursore di puntamento per elementi interattivi (mano con indice teso: pointinghand su Mac Cocoa, hand2 su Win/Linux)
+# Cursore di puntamento per elementi interattivi (mano con indice teso: pointinghand su Mac, hand2 su Windows/Linux)
 POINTER_CURSOR = "pointinghand" if sys.platform == "darwin" else "hand2"

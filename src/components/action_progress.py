@@ -1,11 +1,12 @@
 """
-MIRA - Componente Barra di Avanzamento con Zona Target
+OMBRA - Componente Barra di Avanzamento con Zona Target
 Widget canvas per visualizzare l'avanzamento temporale e la finestra dell'azione target durante il test.
 """
 
 import tkinter as tk
 import customtkinter as ctk
 from ..constants import BG_DARK, ACCENT
+
 
 class ActionProgressBar(ctk.CTkFrame):
     """
@@ -81,8 +82,12 @@ class ActionProgressBar(ctk.CTkFrame):
             return
         self._last_fill_x = fill_x
 
-        self.canvas.coords(self._fill_id, pad_x, track_y1 + 1, max(pad_x, fill_x), track_y2 - 1)
-        self.canvas.coords(self._cursor_id, fill_x - 5, track_y1 - 1, fill_x + 5, track_y2 + 1)
+        self.canvas.coords(
+            self._fill_id, pad_x, track_y1 + 1, max(pad_x, fill_x), track_y2 - 1
+        )
+        self.canvas.coords(
+            self._cursor_id, fill_x - 5, track_y1 - 1, fill_x + 5, track_y2 + 1
+        )
 
     def redraw(self):
         self.canvas.delete("all")
@@ -103,8 +108,13 @@ class ActionProgressBar(ctk.CTkFrame):
 
         # Sfondo traccia
         self._bg_id = self.canvas.create_rectangle(
-            pad_x, track_y1, pad_x + track_w, track_y2,
-            fill="#1e1e26", outline="#323242", width=1
+            pad_x,
+            track_y1,
+            pad_x + track_w,
+            track_y2,
+            fill="#1e1e26",
+            outline="#323242",
+            width=1,
         )
 
         # Zona evidenziata indicativa per l'azione
@@ -117,22 +127,38 @@ class ActionProgressBar(ctk.CTkFrame):
             x_end = pad_x + (f_end / self.total_frames) * track_w
 
             self._action_id = self.canvas.create_rectangle(
-                x_start, track_y1, x_end, track_y2,
-                fill="#ffb703", outline="#ff9f1c", width=1
+                x_start,
+                track_y1,
+                x_end,
+                track_y2,
+                fill="#ffb703",
+                outline="#ff9f1c",
+                width=1,
             )
 
         # Barra di progresso riprodotta (verde accento)
-        ratio = self.current_frame / max(1, self.total_frames - 1) if self.total_frames > 0 else 0.0
+        ratio = (
+            self.current_frame / max(1, self.total_frames - 1)
+            if self.total_frames > 0
+            else 0.0
+        )
         fill_x = pad_x + ratio * track_w
 
         self._fill_id = self.canvas.create_rectangle(
-            pad_x, track_y1 + 1, max(pad_x, fill_x), track_y2 - 1,
-            fill=ACCENT, outline=""
+            pad_x,
+            track_y1 + 1,
+            max(pad_x, fill_x),
+            track_y2 - 1,
+            fill=ACCENT,
+            outline="",
         )
         # Cursore (playhead)
         self._cursor_id = self.canvas.create_oval(
-            fill_x - 5, track_y1 - 1, fill_x + 5, track_y2 + 1,
-            fill="#ffffff", outline=ACCENT, width=2
+            fill_x - 5,
+            track_y1 - 1,
+            fill_x + 5,
+            track_y2 + 1,
+            fill="#ffffff",
+            outline=ACCENT,
+            width=2,
         )
-
-

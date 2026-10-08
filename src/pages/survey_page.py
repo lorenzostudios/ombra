@@ -1,12 +1,21 @@
 """
-MIRA - Questionario Post-Esperimento (SurveyPage)
+OMBRA - Questionario Post-Esperimento (SurveyPage)
 Raccoglie i feedback qualitativi del partecipante al termine dei trial visivi,
 salvandoli in 'survey_results.csv' e reindirizzando alla schermata dei report.
 """
 
 import datetime
 import customtkinter as ctk
-from ..constants import BG_DARK, CARD_BG, CARD_BORDER, ACCENT, ACCENT_HOVER, TEXT_LIGHT, TEXT_MUTED
+from ..constants import (
+    BG_DARK,
+    CARD_BG,
+    CARD_BORDER,
+    ACCENT,
+    ACCENT_HOVER,
+    TEXT_LIGHT,
+    TEXT_MUTED,
+)
+
 
 class SurveyPage(ctk.CTkFrame):
     """

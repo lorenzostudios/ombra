@@ -1,5 +1,5 @@
 """
-MIRA - Analisi Audio e Tempi di Reazione (AudioAnalysisPage)
+OMBRA - Analisi Audio e Tempi di Reazione (AudioAnalysisPage)
 Interfaccia per la visualizzazione dell'oscillogramma/waveform delle risposte vocali,
 confronto tra target temporale nel video ed onset vocale rilevato con Whisper/RMS,
 e riproduzione con cursore playhead in tempo reale.
@@ -17,6 +17,7 @@ import numpy as np
 try:
     import soundfile as sf
     import sounddevice as sd
+
     _AUDIO_PLAYBACK_OK = True
 except Exception:
     _AUDIO_PLAYBACK_OK = False
@@ -38,6 +39,7 @@ from ..constants import (
     POINTER_CURSOR,
 )
 from ..utils import open_path
+
 
 class AudioAnalysisPage(ctk.CTkFrame):
     """
@@ -315,7 +317,6 @@ class AudioAnalysisPage(ctk.CTkFrame):
         )
         self.seg_manual_answer.pack(side="left", padx=(0, 12))
 
-
         ctk.CTkButton(
             m_row,
             text="Salva",
@@ -479,7 +480,10 @@ class AudioAnalysisPage(ctk.CTkFrame):
                         break
             if not matched and sel_session is not None and sel_trial is not None:
                 for it in self.items:
-                    if it.get("session_index") == sel_session and it.get("trial_num") == sel_trial:
+                    if (
+                        it.get("session_index") == sel_session
+                        and it.get("trial_num") == sel_trial
+                    ):
                         matched = it
                         break
 
@@ -508,7 +512,15 @@ class AudioAnalysisPage(ctk.CTkFrame):
             try:
                 resolved = cdir.resolve()
                 if resolved.exists():
-                    for ext in ("*.wav", "*.WAV", "*.mp3", "*.MP3", "*.m4a", "*.ogg", "*.flac"):
+                    for ext in (
+                        "*.wav",
+                        "*.WAV",
+                        "*.mp3",
+                        "*.MP3",
+                        "*.m4a",
+                        "*.ogg",
+                        "*.flac",
+                    ):
                         for p in resolved.rglob(ext):
                             if p.is_file():
                                 found_paths.add(p)
@@ -520,7 +532,11 @@ class AudioAnalysisPage(ctk.CTkFrame):
             af = r.get("audio_file", "").strip()
             if af:
                 for cdir in candidates:
-                    p = (cdir / af).resolve() if not pathlib.Path(af).is_absolute() else pathlib.Path(af)
+                    p = (
+                        (cdir / af).resolve()
+                        if not pathlib.Path(af).is_absolute()
+                        else pathlib.Path(af)
+                    )
                     if p.exists() and p.is_file():
                         found_paths.add(p)
 
@@ -535,7 +551,9 @@ class AudioAnalysisPage(ctk.CTkFrame):
                 participant_name = m_folder.group(2).strip()
             else:
                 session_idx = 0
-                participant_name = folder_name if folder_name != "audio_responses" else "Partecipante"
+                participant_name = (
+                    folder_name if folder_name != "audio_responses" else "Partecipante"
+                )
                 for parent in audio_path.parents:
                     m_p = re.match(r"^(\d+)\s*-\s*(.+)$", parent.name)
                     if m_p:
@@ -551,7 +569,9 @@ class AudioAnalysisPage(ctk.CTkFrame):
                 trial_num = 0
                 video_stem = audio_path.stem
 
-            norm_audio = unicodedata.normalize("NFC", str(audio_path)).replace("\\", "/")
+            norm_audio = unicodedata.normalize("NFC", str(audio_path)).replace(
+                "\\", "/"
+            )
             rel_audio = (
                 norm_audio.split("audio_responses/", 1)[1]
                 if "audio_responses/" in norm_audio
@@ -599,8 +619,10 @@ class AudioAnalysisPage(ctk.CTkFrame):
             # 4. Fallback: match per nome file univoco
             if not csv_row:
                 cands = [
-                    r for r in csv_results
-                    if r.get("audio_file") and pathlib.Path(r["audio_file"].strip()).name == audio_path.name
+                    r
+                    for r in csv_results
+                    if r.get("audio_file")
+                    and pathlib.Path(r["audio_file"].strip()).name == audio_path.name
                 ]
                 if len(cands) == 1:
                     csv_row = cands[0]
@@ -613,7 +635,10 @@ class AudioAnalysisPage(ctk.CTkFrame):
             if not matched_vcfg and csv_row and csv_row.get("video_filename"):
                 v_stem2 = pathlib.Path(csv_row["video_filename"]).stem
                 for vname, vcfg in cfg_all.items():
-                    if pathlib.Path(vname).stem == v_stem2 or vname == csv_row["video_filename"]:
+                    if (
+                        pathlib.Path(vname).stem == v_stem2
+                        or vname == csv_row["video_filename"]
+                    ):
                         matched_vcfg = vcfg
                         break
 
@@ -656,10 +681,13 @@ class AudioAnalysisPage(ctk.CTkFrame):
                 except (ValueError, TypeError):
                     pass
 
-                answered_flag = str(csv_row.get("answered", "")).lower() in ("true", "1", "yes")
+                answered_flag = str(csv_row.get("answered", "")).lower() in (
+                    "true",
+                    "1",
+                    "yes",
+                )
                 if answer == "no_response" and response_time_ms is None:
                     delta_ms = None
-
 
             if matched_vcfg:
                 if target_ms is None:
@@ -671,13 +699,21 @@ class AudioAnalysisPage(ctk.CTkFrame):
                 elif not correct_answer:
                     correct_answer = matched_vcfg.get("correct_answer", "")
                 if matched_vcfg.get("label_yes"):
-                    label_yes = (matched_vcfg.get("label_yes") or "").strip() or label_yes
+                    label_yes = (
+                        matched_vcfg.get("label_yes") or ""
+                    ).strip() or label_yes
                 elif not label_yes or label_yes == "SI":
-                    label_yes = (matched_vcfg.get("label_yes") or "").strip() or label_yes or "SI"
+                    label_yes = (
+                        (matched_vcfg.get("label_yes") or "").strip()
+                        or label_yes
+                        or "SI"
+                    )
                 if matched_vcfg.get("label_no"):
                     label_no = (matched_vcfg.get("label_no") or "").strip() or label_no
                 elif not label_no or label_no == "NO":
-                    label_no = (matched_vcfg.get("label_no") or "").strip() or label_no or "NO"
+                    label_no = (
+                        (matched_vcfg.get("label_no") or "").strip() or label_no or "NO"
+                    )
 
             items.append(
                 {
@@ -731,7 +767,9 @@ class AudioAnalysisPage(ctk.CTkFrame):
 
         current_session = None
         for item in filtered:
-            sess_title = f"Sessione {item['session_index']} - {item['participant_name']}"
+            sess_title = (
+                f"Sessione {item['session_index']} - {item['participant_name']}"
+            )
             if sess_title != current_session:
                 current_session = sess_title
                 grp = ctk.CTkFrame(self.list_container, fg_color="transparent")
@@ -859,9 +897,9 @@ class AudioAnalysisPage(ctk.CTkFrame):
             text=f"{it['target_ms']} ms" if it["target_ms"] is not None else "-"
         )
         is_answered = (
-            (str(it.get("answered", "")).lower() in ("true", "1", "yes") or it.get("answer") in ("yes", "no"))
-            and it.get("response_time_ms") is not None
-        )
+            str(it.get("answered", "")).lower() in ("true", "1", "yes")
+            or it.get("answer") in ("yes", "no")
+        ) and it.get("response_time_ms") is not None
         if is_answered:
             resp_txt = f"{it['response_time_ms']} ms"
             if it.get("delta_ms") is not None:
@@ -899,16 +937,28 @@ class AudioAnalysisPage(ctk.CTkFrame):
         lno = (it.get("label_no") or "").strip() or "NO"
         v_clean = (value or "").strip().lower()
 
-        if value == opt3_val or v_clean in ("non risposto", "no_response", "nessuna risposta", "none", ""):
+        if value == opt3_val or v_clean in (
+            "non risposto",
+            "no_response",
+            "nessuna risposta",
+            "none",
+            "",
+        ):
             it["answer"] = "no_response"
             it["answered"] = "False"
             it["response_time_ms"] = None
             it["delta_ms"] = None
             self.entry_manual_onset_ms.delete(0, "end")
-        elif value == opt1_val or v_clean == ly.lower() or v_clean in ("yes", "sì", "si", "true", "y", "opzione 1"):
+        elif (
+            value == opt1_val
+            or v_clean == ly.lower()
+            or v_clean in ("yes", "sì", "si", "true", "y", "opzione 1")
+        ):
             it["answer"] = "yes"
             it["answered"] = "True"
-            curr_txt = (self.entry_manual_onset_ms.get() or "").strip().replace(",", ".")
+            curr_txt = (
+                (self.entry_manual_onset_ms.get() or "").strip().replace(",", ".")
+            )
             if not curr_txt and self.playback_time > 0:
                 val = int(round(self.playback_time * 1000.0))
                 self.entry_manual_onset_ms.delete(0, "end")
@@ -924,10 +974,16 @@ class AudioAnalysisPage(ctk.CTkFrame):
                         it["delta_ms"] = val - it["target_ms"]
                 except Exception:
                     pass
-        elif value == opt2_val or v_clean == lno.lower() or v_clean in ("no", "false", "n", "opzione 2"):
+        elif (
+            value == opt2_val
+            or v_clean == lno.lower()
+            or v_clean in ("no", "false", "n", "opzione 2")
+        ):
             it["answer"] = "no"
             it["answered"] = "True"
-            curr_txt = (self.entry_manual_onset_ms.get() or "").strip().replace(",", ".")
+            curr_txt = (
+                (self.entry_manual_onset_ms.get() or "").strip().replace(",", ".")
+            )
             if not curr_txt and self.playback_time > 0:
                 val = int(round(self.playback_time * 1000.0))
                 self.entry_manual_onset_ms.delete(0, "end")
@@ -990,11 +1046,25 @@ class AudioAnalysisPage(ctk.CTkFrame):
         ans_clean = (ans_seg or "").strip().lower()
 
         # Priorità a 'Non risposto' per evitare conflitti con 'no'
-        if ans_seg == opt3_val or ans_clean in ("non risposto", "no_response", "nessuna risposta", "none", ""):
+        if ans_seg == opt3_val or ans_clean in (
+            "non risposto",
+            "no_response",
+            "nessuna risposta",
+            "none",
+            "",
+        ):
             answer = "no_response"
-        elif ans_seg == opt1_val or ans_clean == ly.lower() or ans_clean in ("yes", "sì", "si", "true", "y", "opzione 1"):
+        elif (
+            ans_seg == opt1_val
+            or ans_clean == ly.lower()
+            or ans_clean in ("yes", "sì", "si", "true", "y", "opzione 1")
+        ):
             answer = "yes"
-        elif ans_seg == opt2_val or ans_clean == lno.lower() or ans_clean in ("no", "false", "n", "opzione 2"):
+        elif (
+            ans_seg == opt2_val
+            or ans_clean == lno.lower()
+            or ans_clean in ("no", "false", "n", "opzione 2")
+        ):
             answer = "no"
         else:
             answer = "no_response"
@@ -1010,12 +1080,15 @@ class AudioAnalysisPage(ctk.CTkFrame):
             is_correct = ""
             self.entry_manual_onset_ms.delete(0, "end")
         else:
-            raw_onset = (self.entry_manual_onset_ms.get() or "").strip().replace(",", ".")
+            raw_onset = (
+                (self.entry_manual_onset_ms.get() or "").strip().replace(",", ".")
+            )
             try:
                 onset_ms = int(round(float(raw_onset)))
             except (ValueError, TypeError):
                 messagebox.showerror(
-                    APP_TITLE, "Inserisci un valore numerico valido per il timing in ms."
+                    APP_TITLE,
+                    "Inserisci un valore numerico valido per il timing in ms.",
                 )
                 return
 
@@ -1077,9 +1150,7 @@ class AudioAnalysisPage(ctk.CTkFrame):
             self.app.set_status(
                 f"Correzione salvata per il trial #{it['trial_num']}.", "success"
             )
-            self.lbl_manual_badge.configure(
-                text="MODIFICA SALVATA", text_color=ACCENT
-            )
+            self.lbl_manual_badge.configure(text="MODIFICA SALVATA", text_color=ACCENT)
 
             # Aggiorna immediatamente l'interfaccia utente:
             # 1. Scheda informativa in alto con i nuovi ms e delta
@@ -1089,12 +1160,13 @@ class AudioAnalysisPage(ctk.CTkFrame):
             # 3. Lista dei trial a sinistra (testo risposta e timing aggiornati)
             self._populate_list()
         else:
-            self.app.set_status("Impossibile aggiornare il file dei risultati.", "error")
+            self.app.set_status(
+                "Impossibile aggiornare il file dei risultati.", "error"
+            )
             messagebox.showerror(
                 APP_TITLE,
-                "Impossibile trovare il record corrispondente nel file dei risultati test_results.csv."
+                "Impossibile trovare il record corrispondente nel file dei risultati test_results.csv.",
             )
-
 
     def _load_audio_file(self, path):
         if not path.exists():
@@ -1207,9 +1279,7 @@ class AudioAnalysisPage(ctk.CTkFrame):
             x_resp = (resp_sec / dur) * cw
             if 0 <= x_resp <= cw:
                 # Linea verticale cursore verde
-                self.canvas.create_line(
-                    x_resp, 0, x_resp, ch, fill=ACCENT, width=2
-                )
+                self.canvas.create_line(x_resp, 0, x_resp, ch, fill=ACCENT, width=2)
                 # Cursore triangolare in alto
                 self.canvas.create_polygon(
                     x_resp - 7, 0, x_resp + 7, 0, x_resp, 9, fill=ACCENT
@@ -1229,7 +1299,6 @@ class AudioAnalysisPage(ctk.CTkFrame):
                     fill=ACCENT,
                     font=("sans-serif", 9, "bold"),
                 )
-
 
         # Cursore Playhead Timeline (oggetti canvas persistenti aggiornati in tempo reale)
         x_play = (self.playback_time / dur) * cw
@@ -1270,15 +1339,15 @@ class AudioAnalysisPage(ctk.CTkFrame):
 
     def play(self):
         if not _AUDIO_PLAYBACK_OK or self.audio_data is None:
-            self.app.set_status("Librerie audio non disponibili o nessun file.", "error")
+            self.app.set_status(
+                "Librerie audio non disponibili o nessun file.", "error"
+            )
             return
         if self.playback_time >= self.duration_sec:
             self.playback_time = 0.0
 
         self.is_playing = True
-        self.btn_play.configure(
-            text="⏸ Pausa", fg_color=WARN, hover_color="#d08020"
-        )
+        self.btn_play.configure(text="⏸ Pausa", fg_color=WARN, hover_color="#d08020")
 
         start_sample = int(self.playback_time * self.sample_rate)
         chunk = self.audio_data[start_sample:]

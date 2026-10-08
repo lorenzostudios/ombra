@@ -1,5 +1,5 @@
 """
-MIRA - Editor Manuale Ombre con Keyframing (ManualShadowPage)
+OMBRA - Editor Manuale Ombre con Keyframing (ManualShadowPage)
 Consente di posizionare, ruotare, scalare ed interpolare ombre ellittiche fotogramma
 per fotogramma mediante keyframe visivi, maniglie di controllo interattive e salvataggio del progetto.
 """
@@ -52,6 +52,7 @@ from ..shadow.manual_shadow import (
     manual_find_project,
     MANUAL_PROJECT_SUFFIX,
 )
+
 
 class ManualShadowPage(ctk.CTkFrame):
     """
@@ -708,7 +709,9 @@ class ManualShadowPage(ctk.CTkFrame):
             )
             return
 
-        nearest_frame = min(self.keyframes.keys(), key=lambda f: abs(f - self.current_frame))
+        nearest_frame = min(
+            self.keyframes.keys(), key=lambda f: abs(f - self.current_frame)
+        )
         self.current_frame = nearest_frame
         self._updating_ui = True
         self.slider.set(self.current_frame)

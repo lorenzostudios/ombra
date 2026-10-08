@@ -1,5 +1,5 @@
 """
-MIRA - Funzioni di Utilità Generali
+OMBRA - Funzioni di Utilità Generali
 Fornisce funzioni helper per la scansione dei video sul filesystem,
 il caricamento asincrono dei frame, il bilanciamento casuale delle sessioni di test
 e l'apertura di cartelle/file con il file manager nativo del sistema operativo.
@@ -10,6 +10,7 @@ import cv2
 import pathlib
 import platform
 import subprocess
+
 
 def is_augmented(path: pathlib.Path) -> bool:
     return pathlib.Path(path).stem.startswith("_")
@@ -43,7 +44,7 @@ def video_duration_ms(frames: list, fps: float) -> int:
 
 
 def _ctk_clear_image(ctk_label):
-    """Rimuove DAVVERO l'immagine dal tk.Label interno di un CTkLabel."""
+    """Rimuove l'immagine dal tk.Label interno di un CTkLabel."""
     try:
         ctk_label._label.configure(image="")
     except Exception:
@@ -80,7 +81,9 @@ def counterpart_video_path(video_path: pathlib.Path) -> pathlib.Path:
     return video_path.parent / counterpart_name
 
 
-def build_balanced_test_session(videos: list, rng, n_orig: int = 5, n_alt: int = 5) -> list:
+def build_balanced_test_session(
+    videos: list, rng, n_orig: int = 5, n_alt: int = 5
+) -> list:
     """
     Seleziona per il test un insieme bilanciato e casuale di video:
     n_orig video originali e n_alt video alterati, garantendo che non compaiano
@@ -106,7 +109,9 @@ def build_balanced_test_session(videos: list, rng, n_orig: int = 5, n_alt: int =
         rng.shuffle(selected_bases)
         orig_bases = selected_bases[:n_orig]
         alt_bases = selected_bases[n_orig:target_total]
-        chosen = [pairs[b]["original"] for b in orig_bases] + [pairs[b]["altered"] for b in alt_bases]
+        chosen = [pairs[b]["original"] for b in orig_bases] + [
+            pairs[b]["altered"] for b in alt_bases
+        ]
     else:
         chosen_bases = set()
         available_orig = [b for b, d in pairs.items() if "original" in d]
@@ -116,7 +121,9 @@ def build_balanced_test_session(videos: list, rng, n_orig: int = 5, n_alt: int =
                 chosen.append(pairs[b]["original"])
                 chosen_bases.add(b)
 
-        available_alt = [b for b, d in pairs.items() if "altered" in d and b not in chosen_bases]
+        available_alt = [
+            b for b, d in pairs.items() if "altered" in d and b not in chosen_bases
+        ]
         rng.shuffle(available_alt)
         alt_chosen = []
         for b in available_alt:
@@ -128,7 +135,7 @@ def build_balanced_test_session(videos: list, rng, n_orig: int = 5, n_alt: int =
         if len(chosen) < target_total:
             remaining = [v for v in videos if v not in chosen]
             rng.shuffle(remaining)
-            chosen.extend(remaining[:target_total - len(chosen)])
+            chosen.extend(remaining[: target_total - len(chosen)])
 
     rng.shuffle(chosen)
     return chosen

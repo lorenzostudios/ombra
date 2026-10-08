@@ -1,5 +1,5 @@
 """
-MIRA - Componente Player Video
+OMBRA - Componente Player Video
 Player video ad alte prestazioni (60+ FPS) basato su OpenCV e Pillow/Tkinter.
 Include pre-caching asincrono dei frame, sincronizzazione clock ad alta precisione
 e controlli integrati di riproduzione frame-by-frame.
@@ -18,11 +18,11 @@ from PIL import Image, ImageTk
 from ..constants import PANEL_BG, TEXT_MUTED, ACCENT, ACCENT_HOVER
 from ..utils import load_video_frames
 
+
 class VideoPlayerFrame(ctk.CTkFrame):
     """
     Player video riusabile ad alte prestazioni basato su CustomTkinter e Tkinter nativo.
     Supporta riproduzione fluida a frame rate nativo (60+ FPS) senza frame drop né slow motion.
-    Include pre-caching asincrono in background di PIL e PhotoImage e clock ad alta precisione time.perf_counter().
     """
 
     LOAD_TIMEOUT_SEC = 20.0  # oltre questo tempo, un caricamento e' considerato fallito
@@ -69,7 +69,6 @@ class VideoPlayerFrame(ctk.CTkFrame):
         self._last_h = 0
         self._last_nw = 0
         self._last_nh = 0
-
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -182,7 +181,11 @@ class VideoPlayerFrame(ctk.CTkFrame):
             return
         nw, nh = self._compute_display_size()
         # Se la variazione è minima (< 25px), preserva la cache già generata per evitare ricaricamenti a vuoto
-        if self._last_nw <= 0 or abs(nw - self._last_nw) > 25 or abs(nh - self._last_nh) > 25:
+        if (
+            self._last_nw <= 0
+            or abs(nw - self._last_nw) > 25
+            or abs(nh - self._last_nh) > 25
+        ):
             self._last_nw = nw
             self._last_nh = nh
             self._pil_cache.clear()
@@ -217,7 +220,11 @@ class VideoPlayerFrame(ctk.CTkFrame):
         def worker():
             try:
                 frames, fps = load_video_frames(path)
-                final_fps = float(expected_fps) if (expected_fps is not None and float(expected_fps) > 0) else float(fps)
+                final_fps = (
+                    float(expected_fps)
+                    if (expected_fps is not None and float(expected_fps) > 0)
+                    else float(fps)
+                )
                 self._load_queue.put((my_gen, "ok", frames, final_fps))
             except Exception as e:  # noqa: BLE001
                 self._load_queue.put((my_gen, "error", str(e), None))
@@ -348,7 +355,11 @@ class VideoPlayerFrame(ctk.CTkFrame):
                 except Exception:
                     pass
 
-        if end_idx < total and generation == self._precache_generation and not self.playing:
+        if (
+            end_idx < total
+            and generation == self._precache_generation
+            and not self.playing
+        ):
             try:
                 self.after(5, lambda: self._start_photo_precache(generation, end_idx))
             except Exception:
@@ -418,7 +429,6 @@ class VideoPlayerFrame(ctk.CTkFrame):
         self._start_precache_worker(self._precache_generation, nw, nh)
         self._refresh_current_frame()
 
-
     def _refresh_current_frame(self):
         if self.frames:
             self._render(self.frame_idx)
@@ -434,7 +444,9 @@ class VideoPlayerFrame(ctk.CTkFrame):
         pil_img = self._pil_cache.get(idx)
         if pil_img is None or pil_img.size != (nw, nh):
             frame_bgr = self.frames[idx]
-            resized_bgr = cv2.resize(frame_bgr, (nw, nh), interpolation=cv2.INTER_LINEAR)
+            resized_bgr = cv2.resize(
+                frame_bgr, (nw, nh), interpolation=cv2.INTER_LINEAR
+            )
             rgb = cv2.cvtColor(resized_bgr, cv2.COLOR_BGR2RGB)
             pil_img = Image.fromarray(rgb)
             self._pil_cache[idx] = pil_img
@@ -507,7 +519,6 @@ class VideoPlayerFrame(ctk.CTkFrame):
                 self.on_end()
             return
 
-
         target_idx = int(elapsed * fps_val)
         target_idx = max(0, min(target_idx, total_frames - 1))
 
@@ -577,4 +588,3 @@ class VideoPlayerFrame(ctk.CTkFrame):
                 self.slider.set(0)
         except Exception:
             pass
-

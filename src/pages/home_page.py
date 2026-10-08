@@ -1,5 +1,5 @@
 """
-MIRA - Pagina Iniziale (HomePage)
+OMBRA - Pagina Iniziale (HomePage)
 Gestisce la registrazione anagrafica del partecipante (nome, età, genere, abitudini calcistiche),
 la selezione della modalità di risposta (tastiera/microfono), la selezione della cartella video
 e l'avvio della sessione di test bilanciata.
@@ -26,6 +26,7 @@ from ..constants import (
     POINTER_CURSOR,
 )
 from ..utils import discover_videos
+
 
 class HomePage(ctk.CTkFrame):
     """
@@ -188,10 +189,10 @@ class HomePage(ctk.CTkFrame):
             self.wc_buttons[opt] = btn
         self._update_world_cup_buttons()
 
-        # Quanto regolarmente segui una partita di calcio?
+        # Quanto regolarmente segui una partita di calcio interamente?
         ctk.CTkLabel(
             card1,
-            text="Quanto regolarmente segui una partita di calcio?",
+            text="Quanto regolarmente segui una partita di calcio interamente?",
             font=ctk.CTkFont(size=12),
             text_color=TEXT_MUTED,
         ).pack(anchor="w", padx=18)
@@ -389,7 +390,9 @@ class HomePage(ctk.CTkFrame):
             return
 
         if not age:
-            self.lbl_warn.configure(text="Seleziona la tua fascia d'età per continuare.")
+            self.lbl_warn.configure(
+                text="Seleziona la tua fascia d'età per continuare."
+            )
             return
 
         if not gender:
@@ -397,11 +400,15 @@ class HomePage(ctk.CTkFrame):
             return
 
         if not wc:
-            self.lbl_warn.configure(text="Rispondi se hai seguito la FIFA World Cup 2026.")
+            self.lbl_warn.configure(
+                text="Rispondi se hai seguito la FIFA World Cup 2026."
+            )
             return
 
         if not freq:
-            self.lbl_warn.configure(text="Indica quanto regolarmente segui una partita di calcio.")
+            self.lbl_warn.configure(
+                text="Indica quanto regolarmente segui una partita di calcio."
+            )
             return
 
         self.lbl_warn.configure(text="")

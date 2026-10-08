@@ -1,10 +1,11 @@
 """
-MIRA - Stato dell'Applicazione
+OMBRA - Stato dell'Applicazione
 Mantiene in memoria i dati di sessione del partecipante corrente e l'avanzamento dei trial.
 """
 
 import pathlib
 from .constants import DEFAULT_VIDEO_FOLDER
+
 
 class AppState:
     """

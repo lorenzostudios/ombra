@@ -1,5 +1,5 @@
 """
-MIRA - Generazione Ombra con Calibrazione Prospettica (ShadowGenPage)
+OMBRA - Generazione Ombra con Calibrazione Prospettica (ShadowGenPage)
 Editor semi-automatico per la calibrazione geometrica del campo di gioco (omografia),
 il campionamento cromatico di erba e linee, e la proiezione dell'ombra sul terreno.
 """
@@ -54,6 +54,7 @@ from ..shadow.auto_shadow import (
     shadow_get_zoom_patch,
 )
 
+
 class ShadowGenPage(ctk.CTkFrame):
     """
     Interfaccia grafica semi-automatica per la generazione prospettica dell'ombra.
@@ -78,7 +79,6 @@ class ShadowGenPage(ctk.CTkFrame):
             "Azione",
             "Naviga al frame iniziale e finale, clicca al centro del pallone",
         ),
-
         ("READY", "Pronto", "Nuova azione oppure esporta il video"),
     ]
 
@@ -708,7 +708,6 @@ class ShadowGenPage(ctk.CTkFrame):
             "LINES": f"Clicca 2 zone di linea bianca  ({len(self.data['line_samples'])}/2)",
             "START": "Naviga al frame iniziale, clicca AL CENTRO del pallone",
             "END": "Naviga al frame finale, clicca AL CENTRO del pallone",
-
             "READY": f"{len(self.data['actions'])} azione/i registrate - 'Nuova azione' oppure 'Esporta video'",
         }
         self.lbl_phase_title.configure(

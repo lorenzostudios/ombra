@@ -1,5 +1,5 @@
 """
-MIRA - Addestramento avanzato del modello di ombra virtuale basato sulla differenza pixel
+OMBRA - Addestramento avanzato del modello di ombra virtuale basato sulla differenza pixel
 tra i 38 video originali ('WorldCupXXXX.mp4') e i video modificati con ombra ('_WorldCupXXXX.mp4').
 Integra l'Action Recognition per classificare le giocate balistiche e calcola i pesi ottici ed ellittici.
 """
@@ -39,7 +39,9 @@ def extract_pixel_diff_dataset_and_train(
         print(" (Supervisione densa tra coppie di video originali e modificati)")
         print("=" * 70)
 
-    clean_files = sorted([f for f in videos_dir.glob("WorldCup*.mp4") if not f.name.startswith("_")])
+    clean_files = sorted(
+        [f for f in videos_dir.glob("WorldCup*.mp4") if not f.name.startswith("_")]
+    )
     video_pairs = []
     for c in clean_files:
         alt = videos_dir / f"_{c.name}"
@@ -51,7 +53,9 @@ def extract_pixel_diff_dataset_and_train(
         return {"status": "error", "message": "Nessuna coppia trovata"}
 
     if verbose:
-        print(f"Trovate {len(video_pairs)} coppie complete di video (Originale <-> Modificato).")
+        print(
+            f"Trovate {len(video_pairs)} coppie complete di video (Originale <-> Modificato)."
+        )
         print("Estrazione Ground Truth per differenza pixel ed Action Recognition...")
 
     engine = AIShadowEngine(confidence_thresh=0.10)
@@ -83,9 +87,13 @@ def extract_pixel_diff_dataset_and_train(
             continue
 
         # 1. Delimitazione campo e prospettiva
-        field_tilt, field_aspect = AIShadowEngine.estimate_field_perspective(frames_clean)
+        field_tilt, field_aspect = AIShadowEngine.estimate_field_perspective(
+            frames_clean
+        )
         min_pitch_y = AIShadowEngine.detect_pitch_boundary(frames_clean)
-        static_landmarks = AIShadowEngine.find_static_pitch_landmarks(frames_clean, min_pitch_y=min_pitch_y)
+        static_landmarks = AIShadowEngine.find_static_pitch_landmarks(
+            frames_clean, min_pitch_y=min_pitch_y
+        )
 
         # 2. Tracciamento traiettoria del pallone
         ball_xs, ball_ys, valid_mask, _ = engine.find_dominant_ball_trajectory(
@@ -93,7 +101,11 @@ def extract_pixel_diff_dataset_and_train(
         )
 
         gx, gy, heights = engine.ml_model.predict_ground_trajectory(
-            ball_xs, ball_ys, valid_mask, field_tilt=field_tilt, field_aspect=field_aspect
+            ball_xs,
+            ball_ys,
+            valid_mask,
+            field_tilt=field_tilt,
+            field_aspect=field_aspect,
         )
 
         # 3. Classificazione dell'Azione Balistica
@@ -128,9 +140,13 @@ def extract_pixel_diff_dataset_and_train(
                         # Misurazione opacità effettiva
                         clean_pixels = f_clean[mask > 0].astype(float)
                         alt_pixels = f_alt[mask > 0].astype(float)
-                        mean_clean = np.mean(clean_pixels) if len(clean_pixels) > 0 else 100.0
+                        mean_clean = (
+                            np.mean(clean_pixels) if len(clean_pixels) > 0 else 100.0
+                        )
                         mean_alt = np.mean(alt_pixels) if len(alt_pixels) > 0 else 50.0
-                        opacity = float(np.clip(1.0 - (mean_alt / max(1.0, mean_clean)), 0.10, 0.95))
+                        opacity = float(
+                            np.clip(1.0 - (mean_alt / max(1.0, mean_clean)), 0.10, 0.95)
+                        )
 
                         sample = {
                             "video": clean_path.name,
@@ -151,13 +167,15 @@ def extract_pixel_diff_dataset_and_train(
                         dataset_samples.append(sample)
                         samples_in_video += 1
 
-        video_stats.append({
-            "video": clean_path.name,
-            "n_frames": n_frames,
-            "samples": samples_in_video,
-            "action": action_info["label_it"],
-            "action_type": action_type,
-        })
+        video_stats.append(
+            {
+                "video": clean_path.name,
+                "n_frames": n_frames,
+                "samples": samples_in_video,
+                "action": action_info["label_it"],
+                "action_type": action_type,
+            }
+        )
 
         if verbose:
             print(
@@ -168,12 +186,16 @@ def extract_pixel_diff_dataset_and_train(
     elapsed = time.time() - t_start
     if verbose:
         print("-" * 70)
-        print(f"Estrazione completata in {elapsed:.1f}s. Totale campioni pixel: {len(dataset_samples)}")
+        print(
+            f"Estrazione completata in {elapsed:.1f}s. Totale campioni pixel: {len(dataset_samples)}"
+        )
         print("Calcolo pesi ottici condizionati dall'azione (ShadowMLModel)...")
 
     # Addestramento modello ML
     ml_model = ShadowMLModel(weights_path=output_weights)
-    train_results = ml_model.train_on_pixel_diff_dataset(dataset_samples, n_videos=len(video_stats))
+    train_results = ml_model.train_on_pixel_diff_dataset(
+        dataset_samples, n_videos=len(video_stats)
+    )
 
     if verbose:
         print("=" * 70)
@@ -182,10 +204,14 @@ def extract_pixel_diff_dataset_and_train(
         print(f"• Video analizzati:             {train_results.get('n_videos')}")
         print(f"• Campioni temporali pixel:     {train_results.get('n_samples')}")
         print(f"• Aspect Ratio medio appreso:   {train_results.get('mean_aspect'):.3f}")
-        print(f"• Opacità media appresa:        {train_results.get('mean_opacity') * 100:.1f}%")
+        print(
+            f"• Opacità media appresa:        {train_results.get('mean_opacity') * 100:.1f}%"
+        )
         print("• Profili per Azione appresi:")
         for act, prof in train_results.get("action_profiles", {}).items():
-            print(f"   - {act:<20}: aspect={prof.get('aspect_ratio', 0.31):.3f}, rx_scale={prof.get('rx_scale', 1.8):.2f}x")
+            print(
+                f"   - {act:<20}: aspect={prof.get('aspect_ratio', 0.31):.3f}, rx_scale={prof.get('rx_scale', 1.8):.2f}x"
+            )
         print(f"• Pesi serializzati in:         {output_weights.name}")
         print("=" * 70)
 

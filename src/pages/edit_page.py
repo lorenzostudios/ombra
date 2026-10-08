@@ -1,5 +1,5 @@
 """
-MIRA - Pagina di Configurazione Video (EditPage)
+OMBRA - Pagina di Configurazione Video (EditPage)
 Consente di ispezionare ciascun video del dataset, impostare la domanda del test,
 definire le opzioni di risposta e contrassegnare il frame target (momento dell'anomalia/evento).
 """
@@ -23,6 +23,7 @@ from ..constants import (
 )
 from ..utils import discover_videos, video_duration_ms, counterpart_video_path
 from ..components.video_player import VideoPlayerFrame
+
 
 class EditPage(ctk.CTkFrame):
     """
@@ -402,7 +403,9 @@ class EditPage(ctk.CTkFrame):
             try:
                 widget.bind("<Enter>", _on_card_enter)
                 widget.bind("<Leave>", _on_card_leave)
-                widget.bind("<Button-1>", lambda e, p=vp: self.load_video_into_editor(p))
+                widget.bind(
+                    "<Button-1>", lambda e, p=vp: self.load_video_into_editor(p)
+                )
             except Exception:
                 pass
             for child in getattr(widget, "winfo_children", lambda: [])():

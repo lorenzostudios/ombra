@@ -12,10 +12,10 @@ import numpy as np
 WEIGHTS_FILE = pathlib.Path(__file__).resolve().parent / "shadow_model_weights.json"
 
 # Tipologie di azioni calcistiche riconosciute
-ACTION_LANCIO = "LANCIO_PARABOLICO"    # Lancio lungo / Cross / Pallonetto in quota
-ACTION_TIRO = "TIRO_TESO"              # Tiro potente / Passaggio filtrante teso
-ACTION_RASOTERRA = "RASOTERRA"          # Passaggio rasoterra / Pallone che rotola sul prato
-ACTION_RIMBALZO = "RIMBALZO"            # Rimbalzo / Impatto al suolo
+ACTION_LANCIO = "LANCIO_PARABOLICO"  # Lancio lungo / Cross / Pallonetto in quota
+ACTION_TIRO = "TIRO_TESO"  # Tiro potente / Passaggio filtrante teso
+ACTION_RASOTERRA = "RASOTERRA"  # Passaggio rasoterra / Pallone che rotola sul prato
+ACTION_RIMBALZO = "RIMBALZO"  # Rimbalzo / Impatto al suolo
 
 
 def classify_trajectory_action(
@@ -91,7 +91,9 @@ def classify_trajectory_action(
         conf = 0.82 + 0.14 * (1.0 - min(1.0, delta_y / 26.0))
         desc = f"Pallone aderente al manto erboso (escursione Y: {delta_y:.1f} px)"
 
-    elif (curv_a > 0.04 and r2 > 0.60 and delta_y > 40.0) or (delta_y > 85.0 and r2 > 0.40):
+    elif (curv_a > 0.04 and r2 > 0.60 and delta_y > 40.0) or (
+        delta_y > 85.0 and r2 > 0.40
+    ):
         act = ACTION_LANCIO
         lbl = "Lancio Parabolico in Quota"
         conf = 0.76 + 0.20 * min(1.0, (delta_y / 150.0) * max(0.0, r2))
@@ -113,7 +115,6 @@ def classify_trajectory_action(
         "curv_a": curv_a,
         "description": desc,
     }
-
 
 
 class ShadowMLModel:
@@ -213,10 +214,16 @@ class ShadowMLModel:
 
         valid_wh = (widths > 2.0) & (heights > 1.0)
         aspect_ratios = heights[valid_wh] / widths[valid_wh]
-        mean_aspect = float(np.median(aspect_ratios)) if len(aspect_ratios) > 0 else 0.313
+        mean_aspect = (
+            float(np.median(aspect_ratios)) if len(aspect_ratios) > 0 else 0.313
+        )
         mean_aspect = float(np.clip(mean_aspect, 0.25, 0.45))
 
-        mean_opacity = float(np.median(opacities[opacities > 0.02])) if np.any(opacities > 0.02) else 0.65
+        mean_opacity = (
+            float(np.median(opacities[opacities > 0.02]))
+            if np.any(opacities > 0.02)
+            else 0.65
+        )
         mean_width = float(np.median(widths[valid_wh])) if np.any(valid_wh) else 18.0
 
         # Calcola profili specifici per azione
@@ -233,18 +240,20 @@ class ShadowMLModel:
                 action_profiles[act]["aspect_ratio"] = act_aspect
                 action_profiles[act]["rx_scale"] = scale
 
-        self.params.update({
-            "version": "2.0_pixel_diff",
-            "n_training_samples": n_samples,
-            "n_training_videos": n_videos,
-            "aspect_ratio_mean": mean_aspect,
-            "base_width_scale": 1.85,
-            "width_height_ratio": mean_aspect,
-            "base_opacity": float(np.clip(mean_opacity, 0.45, 0.85)),
-            "base_blur": 27,
-            "ground_contact_percentile": 90.0,
-            "action_profiles": action_profiles,
-        })
+        self.params.update(
+            {
+                "version": "2.0_pixel_diff",
+                "n_training_samples": n_samples,
+                "n_training_videos": n_videos,
+                "aspect_ratio_mean": mean_aspect,
+                "base_width_scale": 1.85,
+                "width_height_ratio": mean_aspect,
+                "base_opacity": float(np.clip(mean_opacity, 0.45, 0.85)),
+                "base_blur": 27,
+                "ground_contact_percentile": 90.0,
+                "action_profiles": action_profiles,
+            }
+        )
 
         self.is_trained = True
         self.save_weights()
@@ -296,13 +305,14 @@ class ShadowMLModel:
 
         # Adattamento alla pendenza prospettica del campo
         tilt_rad = np.deg2rad(field_tilt)
-        mid_x = float(np.mean(ball_xs[valid_indices])) if len(valid_indices) > 0 else 960.0
+        mid_x = (
+            float(np.mean(ball_xs[valid_indices])) if len(valid_indices) > 0 else 960.0
+        )
 
         # Calcolo del piano del suolo per ciascun fotogramma
         plane_gy = y_ground_baseline + (ball_xs - mid_x) * np.sin(tilt_rad) * 0.30
         # Offset minimo sotto il pallone: almeno 6px (non 15px come prima)
         target_gy = np.maximum(ball_ys + 6.0, plane_gy)
-
 
         kernel = np.array([0.15, 0.70, 0.15])
         smooth_gy = np.convolve(target_gy, kernel, mode="same")
@@ -339,7 +349,9 @@ class ShadowMLModel:
         profiles = self.params.get("action_profiles", {})
         profile = profiles.get(action_type or ACTION_TIRO, {})
 
-        aspect = profile.get("aspect_ratio", self.params.get("aspect_ratio_mean", field_aspect))
+        aspect = profile.get(
+            "aspect_ratio", self.params.get("aspect_ratio_mean", field_aspect)
+        )
         aspect = float(np.clip(aspect, 0.25, 0.45))
         rx_scale = float(profile.get("rx_scale", 1.85))
         opac_factor = float(profile.get("opacity_factor", 1.00))
@@ -368,4 +380,3 @@ class ShadowMLModel:
             "opacity": effective_opacity,
             "blur": blur_val,
         }
-

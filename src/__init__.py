@@ -1,12 +1,10 @@
 """
-MIRA - Core Package
+OMBRA - Core Package
 """
 
 import customtkinter as ctk
 from .constants import BLUE, BLUE_HOVER
 
-# Configura globalmente il testo in grassetto (bold) su tutti i pulsanti e segmented button,
-# e unifica il colore azzurro e il colore hover in tutta l'applicazione.
 _orig_btn_init = ctk.CTkButton.__init__
 
 
@@ -19,7 +17,6 @@ def _bold_btn_init(self, *args, **kwargs):
     elif isinstance(font, tuple) and len(font) >= 2:
         kwargs["font"] = ctk.CTkFont(family=font[0], size=font[1], weight="bold")
 
-    # Unifica il colore azzurro predefinito di CustomTkinter sul colore BLUE canonico (#3c9fff)
     if "fg_color" not in kwargs:
         kwargs["fg_color"] = BLUE
     if "hover_color" not in kwargs and kwargs.get("fg_color") == BLUE:

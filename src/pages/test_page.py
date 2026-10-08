@@ -1,5 +1,5 @@
 """
-MIRA - Esecuzione Esperimento di Percezione Visiva (TestPage)
+OMBRA - Esecuzione Esperimento di Percezione Visiva (TestPage)
 Gestisce la somministrazione sequenziale dei trial, la riproduzione video a schermo,
 la registrazione delle risposte tramite tastiera (Shift sinistro/destro) o voce (Whisper),
 il tracciamento della latenza e il calcolo dei tempi di reazione.
@@ -35,8 +35,6 @@ from ..utils import is_augmented, trial_counter_str, _ctk_clear_image
 from ..voice_engine import VoiceAnswerEngine, match_voice_answer
 from ..components.video_player import VideoPlayerFrame
 from ..components.action_progress import ActionProgressBar
-
-
 
 
 class TestPage(ctk.CTkFrame):
@@ -466,7 +464,6 @@ class TestPage(ctk.CTkFrame):
             text="Risposta non ancora registrata", text_color=TEXT_MUTED
         )
 
-
         if st.answer_mode == "voice":
             self.lbl_opt_yes_sub.configure(text="Pronuncia a voce (o Shift Sx)")
             self.lbl_opt_no_sub.configure(text="Pronuncia a voce (o Shift Dx)")
@@ -519,7 +516,6 @@ class TestPage(ctk.CTkFrame):
             )
             self._finalize_trial(0)
 
-
     def _on_playing_frame_change(self, idx):
         if hasattr(self, "action_progress"):
             self.action_progress.update_progress(idx)
@@ -556,13 +552,19 @@ class TestPage(ctk.CTkFrame):
                 ret, frame_bgr = cap.read()
                 cap.release()
                 if not ret or frame_bgr is None:
-                    self.after(0, lambda: (
-                        _ctk_clear_image(self.preview_label) or
-                        self.preview_label.configure(text="Anteprima non disponibile")
-                    ))
+                    self.after(
+                        0,
+                        lambda: (
+                            _ctk_clear_image(self.preview_label)
+                            or self.preview_label.configure(
+                                text="Anteprima non disponibile"
+                            )
+                        ),
+                    )
                     return
                 rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
                 from PIL import Image as _PILImage
+
                 pil_img = _PILImage.fromarray(rgb)
                 max_w, max_h = 320, 210
                 iw, ih = pil_img.size
@@ -574,6 +576,7 @@ class TestPage(ctk.CTkFrame):
                 pass
 
         import threading as _threading
+
         _threading.Thread(target=_read_first_frame, daemon=True).start()
 
     def _set_preview_image(self, pil_resized, nw, nh):
@@ -651,7 +654,9 @@ class TestPage(ctk.CTkFrame):
         # Durata calcolata da frames e fps
         n_frames = len(self.player.frames) if self.player.frames else 0
         fps_val = self.player.fps or 25.0
-        vdur_ms = getattr(self.player, "_duration_ms", None) or int(n_frames / max(fps_val, 1.0) * 1000)
+        vdur_ms = getattr(self.player, "_duration_ms", None) or int(
+            n_frames / max(fps_val, 1.0) * 1000
+        )
 
         if getattr(self, "_freeze_timer_id", None) is not None:
             try:
@@ -673,7 +678,6 @@ class TestPage(ctk.CTkFrame):
             self._freeze_timer_id = self.after(
                 2000, lambda: self._on_freeze_timeout(vdur_ms)
             )
-
 
     def _on_freeze_timeout(self, vdur_ms):
         self._freeze_timer_id = None
@@ -704,7 +708,9 @@ class TestPage(ctk.CTkFrame):
         st = self.app.state_
         session_idx = getattr(st, "session_index", 1)
         participant_name = st.participant_name.strip() or "Partecipante"
-        safe_name = re.sub(r'[\\/*?:"<>|]', "", participant_name).strip() or "Partecipante"
+        safe_name = (
+            re.sub(r'[\\/*?:"<>|]', "", participant_name).strip() or "Partecipante"
+        )
         subfolder_name = f"{session_idx} - {safe_name}"
         participant_folder = AUDIO_RESPONSES_FOLDER / subfolder_name
         participant_folder.mkdir(parents=True, exist_ok=True)
@@ -732,7 +738,9 @@ class TestPage(ctk.CTkFrame):
                     if w.get("start") == word_onset:
                         w_end = w.get("end")
                         break
-            onset_sec = engine.detect_onset_sec(audio, word_start=word_onset, word_end=w_end)
+            onset_sec = engine.detect_onset_sec(
+                audio, word_start=word_onset, word_end=w_end
+            )
             onset = onset_sec if onset_sec is not None else word_onset
             self._voice_queue.put(("ok", answer, onset, text))
         except Exception as e:  # noqa: BLE001
@@ -753,7 +761,6 @@ class TestPage(ctk.CTkFrame):
                 return
             self.after(50, lambda: self._poll_voice_result(vdur_ms, start_perf))
             return
-
 
         if item[0] == "error":
             self.app.set_status(f"Errore riconoscimento vocale: {item[1]}", "error")
@@ -872,7 +879,12 @@ class TestPage(ctk.CTkFrame):
     def handle_shortcut(self, keysym):
         if self.state == "intro" and keysym in ("Return", "space", "KP_Enter", " "):
             self.start_next_trial()
-        elif self.state == "question" and keysym in ("Return", "space", "KP_Enter", " "):
+        elif self.state == "question" and keysym in (
+            "Return",
+            "space",
+            "KP_Enter",
+            " ",
+        ):
             self.start_video()
         elif self.state == "playing":
             if keysym == "Shift_L":

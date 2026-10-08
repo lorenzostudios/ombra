@@ -1,5 +1,5 @@
 """
-MIRA - Componente Canvas Interattivo dell'Ombra
+OMBRA - Componente Canvas Interattivo dell'Ombra
 Renderizza il frame corrente con l'ellisse dell'ombra e traduce le interazioni del mouse
 (click, trascinamento, ridimensionamento) in coordinate pixel native del video.
 """
@@ -9,6 +9,7 @@ import customtkinter as ctk
 from PIL import Image
 from ..constants import PANEL_BG, TEXT_MUTED
 from ..utils import _ctk_clear_image
+
 
 class ShadowCanvas(ctk.CTkFrame):
     """
