@@ -1,22 +1,20 @@
-# OMBRA - Video Perception Test Application & Shadow Augmentation
+# OMBRA - Optical Manipulation & Ball-shadow Reality Augmentation
 
-Applicazione desktop per la somministrazione e l'analisi di test di percezione visiva su filmati sportivi con integrazione di computer vision (YOLOv8), risposte vocali (OpenAI Whisper) e generazione di ombre artificiali per l'aumento della percezione di profondità.
+Applicazione desktop scritta in Python che permette in un unico strumento: 
+- Partendo da clip di azioni calcistiche di creare video con l'aggiunta di un'ombra virtuale attraverso 3 differenti metodi (al fine di riottenere quelle informazioni legate alla profondità che vengono perse durante la cattura di immagini bidimensionali).
+- La creazione e somministrazione di test percettivi con registrazione delle risposte e dei tempi di reazione degli utenti per capire se l'alterazione applicata ai video sia effettivamente efficace e poco invasiva.
 
 ---
 
 ## 📖 Panoramica del Progetto 
 
-Il progetto nasce nell'ambito di una tesi sperimentale finalizzata a valutare l'impatto di stimoli visivi sintetici (nello specifico **ombre a terra**) sulla percezione umana della profondità e delle traiettorie tridimensionali in video sportivi (calcio/World Cup). 
-
-L'ipotesi di ricerca indaga se l'aggiunta di un'ombra artificiale proiettata al suolo:
-1. **Migliori l'accuratezza** di giudizio degli utenti rispetto a eventi critici (es. se la palla entra in porta, se rimbalza, se supera una linea, traiettoria verso destra/sinistra).
-2. **Riduca il tempo di risposta** e favorisca una **maggiore capacità di anticipazione predittiva** rispetto al frame/millisecondo chiave dell'evento.
+Il progetto nasce nell'ambito di una tesi sperimentale finalizzata a valutare l'impatto di stimoli visivi artificiali (nello specifico **ombre a terra**) 
 
 ### Componenti e Moduli Software
 L'applicativo è strutturato come una suite integrata suddivisa in quattro aree funzionali:
 
 - **Somministrazione Test (`TestPage`, `SurveyPage`)**:
-  - Esecuzione di batterie di test con riproduzione sincronizzata frame-by-frame di video originali e aumentati (con ombra).
+  - Esecuzione di test con riproduzione di video originali e alterati (prendendo le clip dal dataset in modo randomico ma bilanciato).
   - Raccolta dati demografici/abitudini calcistiche ed esportazione in tempo reale di metriche temporali dettagliate (`timestamp`, `response_time_ms`, `delta_ms` dall'evento target).
   - Supporto per risposte tramite **tastiera** o **voce** (riconoscimento vocale offline con OpenAI Whisper).
 - **Generazione e Aumento Ombre (`src/shadow/`)**:
@@ -34,43 +32,43 @@ L'applicativo è strutturato come una suite integrata suddivisa in quattro aree 
 
 ```
 ombra/
-├── main.py                     # Entry point dell'applicazione Tkinter/CustomTkinter
-├── ombra.spec                  # Configurazione PyInstaller per il packaging multi-piattaforma
-├── requirements.txt            # Dipendenze Python del progetto
-├── test_results.csv            # Dataset dei risultati sperimentali registrati
-├── survey_results.csv          # Risposte ai questionari pre-test
-├── video_config.json           # Metadati dei video (domande, frame target, risposte corrette)
-├── yolov8n.pt                  # Modello compatto YOLOv8 per il tracciamento del pallone
-├── videos/                     # Cartella contenente i video (.mp4) del test
-├── audio_responses/            # Registrazioni audio acquisite durante i test vocali
-└── src/                        # Codice sorgente modulare
-    ├── app.py                  # Finestra principale e routing delle schermate
-    ├── constants.py            # Costanti grafiche, percorsi e configurazioni globali
-    ├── config_manager.py       # Gestione del file video_config.json
-    ├── results_manager.py      # Gestione, validazione ed esportazione dei file CSV
-    ├── voice_engine.py         # Engine audio e trascrizione con Whisper
-    ├── utils.py                # Funzioni di utilità per percorsi (PyInstaller) e frame video
-    ├── state.py                # Stato globale di sessione
-    ├── components/             # Componenti GUI riutilizzabili
-    │   ├── video_player.py     # Player video ad alte prestazioni integrato in Tkinter
-    │   ├── shadow_canvas.py    # Canvas interattivo per manipolazione grafica dell'ombra
-    │   └── action_progress.py  # Barre di avanzamento per task asincroni
-    ├── pages/                  # Viste / Schermate dell'interfaccia utente
-    │   ├── home_page.py        # Menu principale e selezione modalità
-    │   ├── test_page.py        # Schermata di somministrazione del test percettivo
-    │   ├── survey_page.py      # Form anagrafico del partecipante
-    │   ├── report_page.py      # Visualizzazione statistiche e grafici
-    │   ├── manual_shadow_page.py # Tool di annotazione manuale delle ombre
-    │   ├── ai_shadow_page.py   # Pipeline semi-automatica YOLO per l'ombra
-    │   ├── shadow_gen_page.py  # Generazione batch di video aumentati
-    │   ├── edit_page.py        # Editor di configurazione video e frame target
-    │   └── audio_analysis_page.py # Revisione delle registrazioni vocali
-    └── shadow/                 # Algoritmi di stima e rendering dell'ombra
-        ├── ai_shadow.py        # Pipeline di computer vision con YOLOv8
-        ├── auto_shadow.py      # Tracciamento ed estrapolazione traiettorie
-        ├── manual_shadow.py    # Logica di interpolazione fotogrammi
-        ├── shadow_ml.py        # Modello predittivo ML per la coordinata Y dell'ombra
-        └── train_shadow_model.py # Script di addestramento modello
+├── main.py                        # Entry point dell'applicazione
+├── ombra.spec                     # Configurazione PyInstaller per il packaging multi-piattaforma
+├── requirements.txt               # Dipendenze Python del progetto
+├── test_results.csv               # Dataset dei risultati sperimentali registrati
+├── survey_results.csv             # Risposte al questionario post-test
+├── video_config.json              # Metadati dei video (domande, frame target, risposte corrette)
+├── yolov8n.pt                     # Modello compatto YOLOv8 per il tracciamento del pallone
+├── videos/                        # Cartella contenente i video (.mp4) del test
+├── audio_responses/               # Registrazioni audio acquisite durante i test vocali
+└── src/                           ## Codice sorgente modulare
+    ├── app.py                     # Finestra principale e routing delle schermate
+    ├── constants.py               # Costanti grafiche, percorsi e configurazioni globali
+    ├── config_manager.py          # Gestione del file video_config.json
+    ├── results_manager.py         # Gestione, validazione ed esportazione dei file CSV
+    ├── voice_engine.py            # Engine audio e trascrizione con Whisper
+    ├── utils.py                   # Funzioni di utility per percorsi e frame video
+    ├── state.py                   # Stato globale di sessione
+    ├── components/                ## Componenti GUI riutilizzabili
+    │   ├── video_player.py        # Player video integrato in Tkinter
+    │   ├── shadow_canvas.py       # Canvas interattivo per manipolazione grafica dell'ombra
+    │   └── action_progress.py     # Barre di avanzamento per task asincroni
+    ├── pages/                     ## Schermate dell'interfaccia utente
+    │   ├── home_page.py           # Menu principale e selezione modalità
+    │   ├── test_page.py           # Schermata di somministrazione del test percettivo
+    │   ├── survey_page.py         # Form anagrafico del partecipante
+    │   ├── report_page.py         # Visualizzazione statistiche e grafici
+    │   ├── manual_shadow_page.py  # Tool di creazione manuale delle ombre con keyframes
+    │   ├── ai_shadow_page.py      # Tool di creazione semi-automatica delle ombre con AI
+    │   ├── shadow_gen_page.py     # Tool di creazione manuale delle ombre con omografia
+    │   ├── edit_page.py           # Editor di configurazione del dataset
+    │   └── audio_analysis_page.py # Revisione manuale delle registrazioni vocali
+    └── shadow/                    ## Algoritmi di stima e rendering dell'ombra
+        ├── ai_shadow.py           # Pipeline di computer vision con YOLOv8
+        ├── auto_shadow.py         # Tracciamento ed estrapolazione traiettorie
+        ├── manual_shadow.py       # Logica di interpolazione fotogrammi
+        ├── shadow_ml.py           # Modello predittivo ML per la coordinata Y dell'ombra
+        └── train_shadow_model.py  # Script di addestramento modello
 ```
 
 ---
@@ -84,7 +82,7 @@ Se desideri eseguire OMBRA **senza installare Python o dipendenze**:
    - **Windows (x64)**: `OMBRA-Windows.zip`
    - **macOS (Apple Silicon / Intel)**: `OMBRA-macOS.zip`
    - **Linux (x64)**: `OMBRA-Linux.tar.gz`
-3. Scarica anche il pacchetto dei video: `videos.zip`.
+3. Scarica il pacchetto dei video:[`videos.zip`]((../../releases)).
 4. **Organizzazione cartelle**:
    Estrai `videos.zip` in modo che la cartella `videos` risieda accanto all'eseguibile:
    - **Windows**:
@@ -113,7 +111,7 @@ Se desideri eseguire OMBRA **senza installare Python o dipendenze**:
      ```
 
 > [!TIP]
-> Se la cartella `videos` si trova altrove sul disco, è possibile selezionarla in qualsiasi momento dalla schermata principale dell'app tramite il pulsante **"Sfoglia..."**.
+> Se la cartella `videos` si trova altrove sul disco, è possibile selezionarla in qualsiasi momento dalla schermata principale dell'app tramite il pulsante **"Seleziona cartella"**.
 
 ---
 
@@ -122,7 +120,7 @@ Se desideri eseguire OMBRA **senza installare Python o dipendenze**:
 ### Esecuzione della Release Pre-compilata
 - **Windows**: Doppio click su `OMBRA.exe`.
 - **macOS**: Doppio click su `OMBRA.app`.  
-  *(Se macOS blocca l'avvio con avviso sviluppatore non identificato: click destro su `OMBRA.app` $\rightarrow$ **Apri** $\rightarrow$ confermare su **Apri**).*
+  *(Se macOS blocca l'avvio con avviso sviluppatore non identificato: click destro su `OMBRA.app` -> **Apri** -> confermare su **Apri**).*
 - **Linux**: Aprire un terminale nella cartella ed eseguire:
   ```bash
   chmod +x OMBRA
