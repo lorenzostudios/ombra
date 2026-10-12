@@ -8,23 +8,45 @@ Applicazione desktop scritta in Python che permette in un unico strumento:
 
 ## 📖 Panoramica del Progetto 
 
-Il progetto nasce nell'ambito di una tesi sperimentale finalizzata a valutare l'impatto di stimoli visivi artificiali (nello specifico **ombre a terra**) 
+Questo lavoro si propone di indagare se la leggibilità di una partita di calcio ripresa da videocamere possa essere migliorata attraverso un intervento minimamente invasivo di reality augmentation, nello specifico l'aggiunta di un'ombra artificiale proiettata verticalmente dal pallone sul campo di gioco (indipendentemente dalle reali condizioni di illuminazione).
 
-### Componenti e Moduli Software
-L'applicativo è strutturato come una suite integrata suddivisa in quattro aree funzionali:
+Il nostro obiettivo principale è valutare l'efficacia della soluzione proposta e, allo stesso tempo, l'invasività per l'utente.
 
-- **Somministrazione Test (`TestPage`, `SurveyPage`)**:
-  - Esecuzione di test con riproduzione di video originali e alterati (prendendo le clip dal dataset in modo randomico ma bilanciato).
-  - Raccolta dati demografici/abitudini calcistiche ed esportazione in tempo reale di metriche temporali dettagliate (`timestamp`, `response_time_ms`, `delta_ms` dall'evento target).
-  - Supporto per risposte tramite **tastiera** o **voce** (riconoscimento vocale offline con OpenAI Whisper).
-- **Generazione e Aumento Ombre (`src/shadow/`)**:
-  - **AI / Computer Vision**: tracciamento del pallone e dei giocatori mediante **YOLOv8** (`yolov8n.pt`).
-  - **Machine Learning & Trajectory**: stima del punto di proiezione a terra della sfera con modelli dedicati (`shadow_ml.py`, pesi in `shadow_model_weights.json`).
-  - **Strumenti Manuali**: interfaccia canvas interattiva per l'editing, correzione e interpolazione fine delle ombre frame per frame (`manual_shadow_page.py`).
-- **Analisi Audio & Vocale (`AudioAnalysisPage`, `voice_engine.py`)**:
-  - Registrazione audio delle risposte, trascrizione con Whisper e analisi della latenza vocale per sincronizzare l'istante effettivo della risposta verbale.
-- **Reportistica & Statistiche (`ReportPage`, `results_manager.py`)**:
-  - Dashboard per visualizzare accuratezza globale, tempi medi di reazione, confronto diretto fra stimoli aumentati e originali e analisi dei delta temporali.
+A tal fine abbiamo applicato l'augmentation proposta su video offline e li abbiamo sottoposti a degli spettatori calcistici. 
+
+I video sono stati alterati in post-processing utilizzando metodi di Computer Vision in modo semi-automatico, a simulazione di una futura implementazione in tempo reale e automatica.
+
+I risultati indicano che l'augmentation porta un effettivo incremento della leggibilità dei video in termini di migliore accuratezza e tempismo delle previsioni degli utenti sugli esiti delle azioni visionate pur senza essere esplicitamente percepita da essi.
+
+---
+
+## 🧩 Architettura e Moduli del Software
+
+L'applicativo è strutturato come una suite integrata suddivisa in quattro moduli principali:
+
+### 1. 🎬 Generazione dell'ombra virtuale
+Consente di elaborare ed esportare le clip alterate attraverso tre diverse strategie:
+* **Calibrazione omografica:** stima geometrica della prospettiva del campo (tramite flusso ottico di Lucas-Kanade) per proiettare l'ombra in modo fisicamente coerente.
+* **Keyframe manuali:** interpolazione di posizione, opacità e sfocatura per gestire inquadrature complesse.
+* **Pipeline neurale automatica:** rilevamento del campo e tracciamento 3D del pallone completamente automatizzati tramite **YOLOv8**.
+
+### 2. 📋 Gestione del dataset
+Modulo dedicato alla preparazione del materiale sperimentale:
+* Indicizzazione sincronizzata delle clip (versione originale e alterata).
+* Configurazione dei quesiti a risposta multipla e delle risposte corrette.
+* Marcatura precisa del **fotogramma dell'evento chiave** ($t_{\text{target}}$) per il calcolo differenziale dei tempi di reazione.
+
+### 3. 🧪 Somministrazione dei test percettivi
+Ambiente interattivo per la raccolta dati con utenti reali:
+* **Protocollo bilanciato:** presentazione casuale di 10 clip per sessione (5 originali e 5 alterate).
+* **Doppia modalità di risposta:** supporto a input rapido da **tastiera** o acquisizione vocale in tempo reale con trascrizione tramite **OpenAI Whisper**.
+* **Profilazione e feedback:** questionario preliminare per dati demografici/abitudini calcistiche e questionario qualitativo conclusivo per la stima della non-invasività.
+
+### 4. 📊 Analisi Dati e Report
+Strumenti integrati per esaminare e quantificare l'efficacia dell'augmentation:
+* Calcolo automatico di accuratezza predittiva, tempi di reazione assoluti e scostamento temporale dall'evento ($\Delta t_{\text{event}}$).
+* Disaggregazione dei risultati per gruppi demografici, familiarità con il calcio e singola azione.
+* Esportazione completa delle sessioni in formato CSV per analisi statistiche inferenziali.
 
 ---
 
