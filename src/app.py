@@ -13,6 +13,8 @@ import customtkinter as ctk
 
 from .constants import (
     APP_TITLE,
+    BASE_DIR,
+    BUNDLE_DIR,
     BG_DARK,
     PANEL_BG,
     CARD_BG,
@@ -58,6 +60,7 @@ class App(ctk.CTk):
         self.geometry("1280x820")
         self.minsize(1100, 700)
         self.configure(fg_color=BG_DARK)
+        self._setup_app_icon()
 
         self.state_ = AppState()
         self.config_mgr = ConfigManager(VIDEO_CONFIG_FILE)
@@ -76,6 +79,26 @@ class App(ctk.CTk):
         self.protocol("WM_DELETE_WINDOW", self._on_close)
 
         self.after(10, self._maximize_window)
+
+    def _setup_app_icon(self):
+        """Imposta l'icona della finestra dell'applicazione (OMBRA)."""
+        icon_png = BUNDLE_DIR / "img" / "icon.png"
+        if not icon_png.exists():
+            icon_png = BASE_DIR / "img" / "icon.png"
+
+        if icon_png.exists():
+            try:
+                if platform.system() == "Windows":
+                    icon_ico = icon_png.with_suffix(".ico")
+                    if icon_ico.exists():
+                        self.iconbitmap(default=str(icon_ico))
+                        return
+                # macOS, Linux o fallback Windows
+                img = tk.PhotoImage(file=str(icon_png))
+                self.iconphoto(False, img)
+                self._app_icon_img = img  # Riferimento persistente contro il garbage collector
+            except Exception:
+                pass
 
     def _build_layout(self):
         self.grid_rowconfigure(1, weight=1)

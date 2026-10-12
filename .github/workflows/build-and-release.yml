@@ -44,13 +44,38 @@ jobs:
           sudo apt-get install -y python3-tk libportaudio2 libasound2-dev libgl1 libglib2.0-0
 
       - name: Install dependencies
+        shell: bash
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          if [ "${{ runner.os }}" = "Linux" ] || [ "${{ runner.os }}" = "Windows" ]; then
+            # Installa PyTorch CPU-only per evitare oltre 5GB di runtime CUDA NVIDIA
+            pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
+            pip install --no-cache-dir -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
+            # Rimuove eventuali pacchetti CUDA/NVIDIA o Triton trascinati come dipendenze transitive
+            pip uninstall -y nvidia-cuda-nvrtc-cu12 nvidia-cuda-runtime-cu12 nvidia-cuda-cupti-cu12 \
+              nvidia-cudnn-cu12 nvidia-cublas-cu12 nvidia-cufft-cu12 nvidia-curand-cu12 \
+              nvidia-cusolver-cu12 nvidia-cusparse-cu12 nvidia-nccl-cu12 nvidia-nvtx-cu12 \
+              triton 2>/dev/null || true
+          else
+            pip install --no-cache-dir -r requirements.txt
+          fi
+          python -c "import torch; print(f'PyTorch {torch.__version__} (CUDA: {torch.cuda.is_available()})')"
 
       - name: Build with PyInstaller
         run: |
           pyinstaller ombra.spec
+
+      - name: Optimize Linux build
+        if: runner.os == 'Linux'
+        run: |
+          # Rimuove simboli di debug da eseguibili e librerie dinamiche .so
+          find dist/OMBRA -type f -name "*.so*" -exec strip --strip-unneeded {} + 2>/dev/null || true
+          find dist/OMBRA -type f -executable -exec strip --strip-unneeded {} + 2>/dev/null || true
+          # Rimuove header C++ e file di test non necessari a runtime
+          rm -rf dist/OMBRA/_internal/torch/include 2>/dev/null || true
+          rm -rf dist/OMBRA/_internal/torch/test 2>/dev/null || true
+          echo "Dimensione bundle Linux dopo strip:"
+          du -sh dist/OMBRA
 
       - name: Package Windows build
         if: runner.os == 'Windows'
@@ -67,8 +92,9 @@ jobs:
       - name: Package Linux build
         if: runner.os == 'Linux'
         run: |
-          # Preserva i permessi di esecuzione POSIX
-          tar -czvf OMBRA-Linux.tar.gz -C dist OMBRA
+          # Preserva i permessi di esecuzione POSIX con compressione massima gzip (-9)
+          GZIP=-9 tar -czvf OMBRA-Linux.tar.gz -C dist OMBRA
+          ls -lh OMBRA-Linux.tar.gz
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -80,6 +106,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
+          name: OMBRA ${{ github.ref_name }}
           files: ${{ matrix.artifact_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
